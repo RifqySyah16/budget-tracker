@@ -62,8 +62,8 @@ public class WebSecurityConfigurer {
                                                                                 "/swagger-ui/**", "/v3/api-docs/**",
                                                                                 "/error")
                                                                 .permitAll()
-                                                                .requestMatchers(HttpMethod.POST, "/registrasions",
-                                                                                "/registrasions/**")
+                                                                .requestMatchers(HttpMethod.POST, "/registerations",
+                                                                                "/registerations/**")
                                                                 .permitAll()
                                                                 .anyRequest()
                                                                 .authenticated());

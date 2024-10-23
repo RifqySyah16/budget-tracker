@@ -28,6 +28,11 @@ public class ApplicationUserService implements UserDetailsService {
 
     }
 
+    public ApplicationUser getOne(Long id) {
+        return this.applicationUserRepository.findById(id)
+                .orElseThrow(() -> new UserNotFoundException("User not found"));
+    }
+
     public ApplicationUser save(ApplicationUser newUser) {
         Optional<ApplicationUser> existingUser = this.applicationUserRepository.findByUsername(newUser.getUsername());
         if (existingUser.isPresent()) {

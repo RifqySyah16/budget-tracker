@@ -41,7 +41,7 @@ public class AuthenticationController {
         return ResponseEntity.ok(new JwtResponseDTO(jwt));
     }
 
-    @PostMapping("registrasions")
+    @PostMapping("registerations")
     public ResponseEntity<JwtResponseDTO> registrasion(
             @RequestBody @Valid RegisterationRequestDTO registrasionRequestDTO) {
         ApplicationUser newUser = registrasionRequestDTO.convertToEntity();
