@@ -1,12 +1,12 @@
-package com.devland.finalproject.budget_tracker.income;
+package com.devland.finalproject.budget_tracker.expense;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 @ResponseStatus(code = HttpStatus.BAD_REQUEST)
-public class InvalidAmoutException extends RuntimeException {
+public class InvalidExpenseAmountException extends RuntimeException {
 
-    public InvalidAmoutException(String message) {
+    public InvalidExpenseAmountException(String message) {
         super(message);
     }
 }

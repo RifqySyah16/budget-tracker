@@ -15,9 +15,15 @@ public class BalanceService {
     private final ApplicationUserService applicationUserService;
 
     public void updateIncomeBalance(ApplicationUser existingUser, BigDecimal amount) {
-        BigDecimal updatedBalance = existingUser.getBalance().add(amount);
-        existingUser.setBalance(updatedBalance);
+        BigDecimal increaseBalance = existingUser.getBalance().add(amount);
+        existingUser.setBalance(increaseBalance);
         this.applicationUserService.update(existingUser);
+    }
+
+    public void updateExpenseBalance(ApplicationUser existingApplicationUser, BigDecimal amount) {
+        BigDecimal decreaseBalance = existingApplicationUser.getBalance().subtract(amount);
+        existingApplicationUser.setBalance(decreaseBalance);
+        this.applicationUserService.update(existingApplicationUser);
     }
 
 }

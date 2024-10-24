@@ -1,5 +1,6 @@
 package com.devland.finalproject.budget_tracker.expense;
 
+import java.math.BigDecimal;
 import java.util.Optional;
 
 import org.springframework.data.domain.Page;
@@ -8,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import com.devland.finalproject.budget_tracker.applicationuser.ApplicationUserService;
 import com.devland.finalproject.budget_tracker.applicationuser.model.ApplicationUser;
+import com.devland.finalproject.budget_tracker.balance.BalanceService;
 import com.devland.finalproject.budget_tracker.expense.model.Expense;
 import com.devland.finalproject.budget_tracker.expense.model.ExpenseCategory;
 
@@ -16,6 +18,7 @@ import lombok.RequiredArgsConstructor;
 @Service
 @RequiredArgsConstructor
 public class ExpenseService {
+    private final BalanceService balanceService;
     private final ExpenseRepository expenseRepository;
     private final ApplicationUserService applicationUserService;
 
@@ -36,7 +39,14 @@ public class ExpenseService {
         ApplicationUser existingApplicationUser = this.applicationUserService.getOne(userId);
         newExpense.setApplicationUser(existingApplicationUser);
 
-        return this.expenseRepository.save(newExpense);
+        if (newExpense.getAmount().compareTo(BigDecimal.ZERO) < 0) {
+            throw new InvalidExpenseAmountException("Expense amount cannot be negative");
+        }
+
+        Expense savedExpense = this.expenseRepository.save(newExpense);
+        this.balanceService.updateExpenseBalance(existingApplicationUser, savedExpense.getAmount());
+
+        return savedExpense;
     }
 
 }

@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 import java.util.List;
 
 import com.devland.finalproject.budget_tracker.applicationuser.model.dto.RegisterationResponseDTO;
+import com.devland.finalproject.budget_tracker.expense.model.Expense;
 import com.devland.finalproject.budget_tracker.income.model.Income;
 
 import jakarta.persistence.Entity;
@@ -40,6 +41,9 @@ public class ApplicationUser {
 
     @OneToMany
     private List<Income> incomes;
+
+    @OneToMany
+    private List<Expense> expenses;
 
     public RegisterationResponseDTO convertToResponse() {
         return RegisterationResponseDTO.builder()

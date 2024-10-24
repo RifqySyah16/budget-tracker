@@ -42,7 +42,7 @@ public class IncomeService {
         newiIncome.setApplicationUser(existingUser);
 
         if (newiIncome.getAmount().compareTo(BigDecimal.ZERO) < 0) {
-            throw new InvalidAmoutException("Income amount cannot be negative");
+            throw new InvalidIncomeAmoutException("Income amount cannot be negative");
         }
 
         Income savedIncome = this.incomeRepository.save(newiIncome);
