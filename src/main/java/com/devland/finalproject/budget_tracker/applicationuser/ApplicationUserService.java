@@ -28,8 +28,8 @@ public class ApplicationUserService implements UserDetailsService {
 
     }
 
-    public ApplicationUser getOne(Long id) {
-        return this.applicationUserRepository.findById(id)
+    public ApplicationUser getOne(Long userId) {
+        return this.applicationUserRepository.findById(userId)
                 .orElseThrow(() -> new UserNotFoundException("User not found"));
     }
 
@@ -44,6 +44,11 @@ public class ApplicationUserService implements UserDetailsService {
         newUser.setPassword(encodedPassword);
 
         return this.applicationUserRepository.save(newUser);
+    }
+
+    public void update(ApplicationUser existingUser) {
+        ApplicationUser updatedUser = this.getOne(existingUser.getId());
+        this.applicationUserRepository.save(updatedUser);
     }
 
 }

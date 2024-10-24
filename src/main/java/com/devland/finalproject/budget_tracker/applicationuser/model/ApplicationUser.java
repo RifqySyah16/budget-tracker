@@ -1,5 +1,6 @@
 package com.devland.finalproject.budget_tracker.applicationuser.model;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 import com.devland.finalproject.budget_tracker.applicationuser.model.dto.RegisterationResponseDTO;
@@ -35,6 +36,8 @@ public class ApplicationUser {
 
     private String password;
 
+    private BigDecimal balance;
+
     @OneToMany
     private List<Income> incomes;
 
@@ -45,6 +48,7 @@ public class ApplicationUser {
                 .email(this.email)
                 .username(this.username)
                 .password(password)
+                .balance(this.balance)
                 .build();
     }
 }

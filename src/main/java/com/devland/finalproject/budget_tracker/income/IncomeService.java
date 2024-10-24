@@ -1,5 +1,6 @@
 package com.devland.finalproject.budget_tracker.income;
 
+import java.math.BigDecimal;
 import java.util.Optional;
 
 import org.springframework.data.domain.Page;
@@ -8,16 +9,20 @@ import org.springframework.stereotype.Service;
 
 import com.devland.finalproject.budget_tracker.applicationuser.ApplicationUserService;
 import com.devland.finalproject.budget_tracker.applicationuser.model.ApplicationUser;
+import com.devland.finalproject.budget_tracker.balance.BalanceService;
 import com.devland.finalproject.budget_tracker.income.model.Income;
 import com.devland.finalproject.budget_tracker.income.model.IncomeCategory;
+import com.devland.finalproject.budget_tracker.transactionhistory.TransactionHistoryService;
 
 import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
 public class IncomeService {
+    private final BalanceService balanceService;
     private final IncomeRepository incomeRepository;
     private final ApplicationUserService applicationUserService;
+    private final TransactionHistoryService transactionHistoryService;
 
     public Page<Income> getAll(Long userId, Optional<IncomeCategory> optionalCategory, Pageable pageable) {
         if (optionalCategory.isPresent()) {
@@ -36,6 +41,15 @@ public class IncomeService {
         ApplicationUser existingUser = this.applicationUserService.getOne(userId);
         newiIncome.setApplicationUser(existingUser);
 
-        return this.incomeRepository.save(newiIncome);
+        if (newiIncome.getAmount().compareTo(BigDecimal.ZERO) < 0) {
+            throw new InvalidAmoutException("Income amount cannot be negative");
+        }
+
+        Income savedIncome = this.incomeRepository.save(newiIncome);
+        this.balanceService.updateIncomeBalance(existingUser, savedIncome.getAmount());
+
+        this.transactionHistoryService.add(savedIncome);
+
+        return savedIncome;
     }
 }
