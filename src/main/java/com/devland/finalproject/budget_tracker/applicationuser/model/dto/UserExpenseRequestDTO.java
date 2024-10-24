@@ -14,7 +14,7 @@ import lombok.Setter;
 public class UserExpenseRequestDTO {
     private Long id;
 
-    public ApplicationUser convertToResponse() {
+    public ApplicationUser convertToEntity() {
         return ApplicationUser.builder()
                 .id(this.id)
                 .build();

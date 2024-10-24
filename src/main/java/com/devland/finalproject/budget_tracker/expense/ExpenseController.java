@@ -1,4 +1,4 @@
-package com.devland.finalproject.budget_tracker.income;
+package com.devland.finalproject.budget_tracker.expense;
 
 import java.util.Optional;
 
@@ -10,33 +10,33 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.devland.finalproject.budget_tracker.applicationuser.ApplicationUserService;
 import com.devland.finalproject.budget_tracker.authentication.model.UserPrincipal;
-import com.devland.finalproject.budget_tracker.income.model.Income;
-import com.devland.finalproject.budget_tracker.income.model.IncomeCategory;
-import com.devland.finalproject.budget_tracker.income.model.dto.IncomeRequestDTO;
-import com.devland.finalproject.budget_tracker.income.model.dto.IncomeResponseDTO;
+import com.devland.finalproject.budget_tracker.expense.model.Expense;
+import com.devland.finalproject.budget_tracker.expense.model.ExpenseCategory;
+import com.devland.finalproject.budget_tracker.expense.model.dto.ExpenseRequestDTO;
+import com.devland.finalproject.budget_tracker.expense.model.dto.ExpenseResponseDTO;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/incomes")
-public class IncomeController {
-    private final IncomeService incomeService;
+@RequestMapping("/expenses")
+public class ExpenseController {
+    private final ExpenseService expenseService;
     private final ApplicationUserService applicationUserService;
 
     @GetMapping
-    public ResponseEntity<Page<IncomeResponseDTO>> getAll(
+    public ResponseEntity<Page<ExpenseResponseDTO>> getAll(
             Authentication authentication,
-            @RequestParam(value = "category", required = false) Optional<IncomeCategory> optionalCategory,
+            @RequestParam(value = "category", required = false) Optional<ExpenseCategory> optionalCategory,
             @RequestParam(value = "sort", defaultValue = "ASC") String sortString,
             @RequestParam(value = "order_by", defaultValue = "id") String orderBy,
             @RequestParam(value = "limit", defaultValue = "5") int limit,
@@ -47,25 +47,25 @@ public class IncomeController {
 
         Sort sort = Sort.by(Sort.Direction.valueOf(sortString), orderBy);
         Pageable pageable = PageRequest.of(page - 1, limit, sort);
-        Page<Income> pageIncome = this.incomeService.getAll(userId, optionalCategory, pageable);
-        Page<IncomeResponseDTO> incomeResponseDTOs = pageIncome.map(Income::convertToResponse);
+        Page<Expense> pageExpense = this.expenseService.getAll(userId, optionalCategory, pageable);
+        Page<ExpenseResponseDTO> expenseResponseDTOs = pageExpense.map(Expense::convertToResponse);
 
-        return ResponseEntity.ok(incomeResponseDTOs);
+        return ResponseEntity.ok(expenseResponseDTOs);
     }
 
     @PostMapping
-    public ResponseEntity<IncomeResponseDTO> add(@RequestBody @Valid IncomeRequestDTO incomeRequestDTO,
+    public ResponseEntity<ExpenseResponseDTO> add(@RequestBody @Valid ExpenseRequestDTO expenseRequestDTO,
             Authentication authentication) {
 
         UserPrincipal userPrincipal = (UserPrincipal) authentication.getPrincipal();
         Long userId = userPrincipal.getId();
 
-        Income newiIncome = incomeRequestDTO.convertToEntity();
-        newiIncome.setApplicationUser(this.applicationUserService.getOne(userId));
+        Expense newExpense = expenseRequestDTO.convertToEntity();
+        newExpense.setApplicationUser(this.applicationUserService.getOne(userId));
 
-        Income savedIncome = this.incomeService.add(newiIncome, userId);
-        IncomeResponseDTO incomeResponseDTO = savedIncome.convertToResponse();
+        Expense savedExpense = this.expenseService.add(userId, newExpense);
+        ExpenseResponseDTO expenseResponseDTO = savedExpense.convertToResponse();
 
-        return ResponseEntity.status(HttpStatus.CREATED).body(incomeResponseDTO);
+        return ResponseEntity.status(HttpStatus.CREATED).body(expenseResponseDTO);
     }
 }

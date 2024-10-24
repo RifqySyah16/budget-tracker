@@ -21,11 +21,11 @@ public class IncomeService {
 
     public Page<Income> getAll(Long userId, Optional<IncomeCategory> optionalCategory, Pageable pageable) {
         if (optionalCategory.isPresent()) {
-            return this.incomeRepository.findAllByApplicationUser_IdAndIncomeCategory(userId, optionalCategory.get(),
+            return this.incomeRepository.findAllByApplicationUserIdAndIncomeCategory(userId, optionalCategory.get(),
                     pageable);
         }
 
-        return this.incomeRepository.findAllByApplicationUser_Id(userId, pageable);
+        return this.incomeRepository.findAllByApplicationUserId(userId, pageable);
     }
 
     public Income add(Income newiIncome, Long userId) {

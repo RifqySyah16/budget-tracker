@@ -9,9 +9,9 @@ import com.devland.finalproject.budget_tracker.income.model.IncomeCategory;
 
 public interface IncomeRepository extends JpaRepository<Income, Long> {
 
-    Page<Income> findAllByApplicationUser_IdAndIncomeCategory(Long userId, IncomeCategory incomeCategory,
-            Pageable pageable);
+        Page<Income> findAllByApplicationUserIdAndIncomeCategory(Long userId, IncomeCategory incomeCategory,
+                        Pageable pageable);
 
-    Page<Income> findAllByApplicationUser_Id(Long userId, Pageable pageable);
+        Page<Income> findAllByApplicationUserId(Long userId, Pageable pageable);
 
 }
