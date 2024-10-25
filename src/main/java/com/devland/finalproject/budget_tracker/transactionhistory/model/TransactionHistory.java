@@ -1,9 +1,9 @@
-package com.devland.finalproject.budget_tracker.transaction_history.model;
+package com.devland.finalproject.budget_tracker.transactionhistory.model;
 
 import java.time.LocalDate;
 
 import com.devland.finalproject.budget_tracker.transaction.model.Transaction;
-import com.devland.finalproject.budget_tracker.transaction_history.model.dto.TransactionHistoryResponseDto;
+import com.devland.finalproject.budget_tracker.transactionhistory.model.dto.TransactionHistoryResponseDto;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;

@@ -9,8 +9,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.devland.finalproject.budget_tracker.transaction.model.Transaction;
 import com.devland.finalproject.budget_tracker.transaction.model.dto.TransactionRequestDto;
-import com.devland.finalproject.budget_tracker.transaction_history.model.TransactionHistory;
-import com.devland.finalproject.budget_tracker.transaction_history.model.dto.TransactionHistoryResponseDto;
+import com.devland.finalproject.budget_tracker.transactionhistory.model.TransactionHistory;
+import com.devland.finalproject.budget_tracker.transactionhistory.model.dto.TransactionHistoryResponseDto;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;

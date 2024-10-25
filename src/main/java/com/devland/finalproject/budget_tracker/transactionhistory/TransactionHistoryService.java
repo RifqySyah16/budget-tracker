@@ -1,4 +1,4 @@
-package com.devland.finalproject.budget_tracker.transaction_history;
+package com.devland.finalproject.budget_tracker.transactionhistory;
 
 import java.time.LocalDate;
 import java.util.Optional;
@@ -7,8 +7,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import com.devland.finalproject.budget_tracker.transaction_history.exception.TransactionNotFoundException;
-import com.devland.finalproject.budget_tracker.transaction_history.model.TransactionHistory;
+import com.devland.finalproject.budget_tracker.transactionhistory.exception.TransactionNotFoundException;
+import com.devland.finalproject.budget_tracker.transactionhistory.model.TransactionHistory;
 
 import lombok.RequiredArgsConstructor;
 

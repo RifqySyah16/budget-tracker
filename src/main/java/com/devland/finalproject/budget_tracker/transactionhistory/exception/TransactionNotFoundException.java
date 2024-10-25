@@ -1,4 +1,4 @@
-package com.devland.finalproject.budget_tracker.transaction_history.exception;
+package com.devland.finalproject.budget_tracker.transactionhistory.exception;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;

@@ -1,4 +1,4 @@
-package com.devland.finalproject.budget_tracker.transaction_history;
+package com.devland.finalproject.budget_tracker.transactionhistory;
 
 import java.time.LocalDate;
 import java.util.Optional;
@@ -13,8 +13,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.devland.finalproject.budget_tracker.transaction_history.model.TransactionHistory;
-import com.devland.finalproject.budget_tracker.transaction_history.model.dto.TransactionHistoryResponseDto;
+import com.devland.finalproject.budget_tracker.transactionhistory.model.TransactionHistory;
+import com.devland.finalproject.budget_tracker.transactionhistory.model.dto.TransactionHistoryResponseDto;
 
 import lombok.RequiredArgsConstructor;
 

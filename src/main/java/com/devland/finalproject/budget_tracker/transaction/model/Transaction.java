@@ -2,7 +2,7 @@ package com.devland.finalproject.budget_tracker.transaction.model;
 
 import java.time.LocalDate;
 
-import com.devland.finalproject.budget_tracker.transaction_history.model.TransactionHistory;
+import com.devland.finalproject.budget_tracker.transactionhistory.model.TransactionHistory;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;

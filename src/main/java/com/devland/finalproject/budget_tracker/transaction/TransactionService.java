@@ -3,8 +3,8 @@ package com.devland.finalproject.budget_tracker.transaction;
 import org.springframework.stereotype.Service;
 
 import com.devland.finalproject.budget_tracker.transaction.model.Transaction;
-import com.devland.finalproject.budget_tracker.transaction_history.TransactionHistoryService;
-import com.devland.finalproject.budget_tracker.transaction_history.model.TransactionHistory;
+import com.devland.finalproject.budget_tracker.transactionhistory.TransactionHistoryService;
+import com.devland.finalproject.budget_tracker.transactionhistory.model.TransactionHistory;
 
 import lombok.RequiredArgsConstructor;
 

@@ -1,4 +1,4 @@
-package com.devland.finalproject.budget_tracker.transaction_history.model.dto;
+package com.devland.finalproject.budget_tracker.transactionhistory.model.dto;
 
 import java.time.LocalDate;
 
