@@ -33,7 +33,7 @@ import lombok.RequiredArgsConstructor;
 public class GoalController {
     private final GoalService goalService;
 
-    @GetMapping("path")
+    @GetMapping
     public ResponseEntity<Page<GoalResponseDTO>> getAll(
             Authentication authentication,
             @RequestParam(value = "name") Optional<Goal> optionalName,
