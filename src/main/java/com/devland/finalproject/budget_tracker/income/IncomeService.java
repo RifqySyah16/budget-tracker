@@ -48,7 +48,7 @@ public class IncomeService {
         }
 
         Income savedIncome = this.incomeRepository.save(newiIncome);
-        this.balanceService.updateIncomeBalance(existingUser, savedIncome.getAmount());
+        this.balanceService.increaseBalance(existingUser, savedIncome.getAmount());
 
         TransactionHistory newTransactionHistory = new TransactionHistory();
         newTransactionHistory.setApplicationUser(newiIncome.getApplicationUser());

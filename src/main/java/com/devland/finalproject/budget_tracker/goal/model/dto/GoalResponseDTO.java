@@ -1,6 +1,7 @@
 package com.devland.finalproject.budget_tracker.goal.model.dto;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 
 import com.devland.finalproject.budget_tracker.applicationuser.model.dto.RegisterationResponseDTO;
 
@@ -21,5 +22,6 @@ public class GoalResponseDTO {
     private String description;
     private BigDecimal progress;
     private BigDecimal target;
+    private LocalDate date;
     private RegisterationResponseDTO registerationResponseDTO;
 }

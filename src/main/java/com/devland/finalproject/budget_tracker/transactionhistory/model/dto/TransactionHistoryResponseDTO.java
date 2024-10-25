@@ -5,6 +5,7 @@ import java.time.LocalDate;
 
 import com.devland.finalproject.budget_tracker.applicationuser.model.dto.RegisterationResponseDTO;
 import com.devland.finalproject.budget_tracker.expense.model.dto.ExpenseResponseDTO;
+import com.devland.finalproject.budget_tracker.goal.model.dto.GoalResponseDTO;
 import com.devland.finalproject.budget_tracker.income.model.dto.IncomeResponseDTO;
 import com.devland.finalproject.budget_tracker.transactionhistory.model.TransactionType;
 
@@ -27,4 +28,5 @@ public class TransactionHistoryResponseDTO {
     private RegisterationResponseDTO registerationResponseDTO;
     private IncomeResponseDTO incomeResponseDTO;
     private ExpenseResponseDTO expenseResponseDTO;
+    private GoalResponseDTO goalResponseDTO;
 }

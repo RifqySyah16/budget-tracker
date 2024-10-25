@@ -14,16 +14,19 @@ import lombok.RequiredArgsConstructor;
 public class BalanceService {
     private final ApplicationUserService applicationUserService;
 
-    public void updateIncomeBalance(ApplicationUser existingUser, BigDecimal amount) {
-        BigDecimal increaseBalance = existingUser.getBalance().add(amount);
-        existingUser.setBalance(increaseBalance);
+    public void increaseBalance(ApplicationUser existingUser, BigDecimal amount) {
+        BigDecimal currentBalance = existingUser.getBalance().add(amount);
+        existingUser.setBalance(currentBalance);
         this.applicationUserService.update(existingUser);
     }
 
-    public void updateExpenseBalance(ApplicationUser existingApplicationUser, BigDecimal amount) {
-        BigDecimal decreaseBalance = existingApplicationUser.getBalance().subtract(amount);
-        existingApplicationUser.setBalance(decreaseBalance);
+    public void decreaseBalance(ApplicationUser existingApplicationUser, BigDecimal amount) {
+        BigDecimal currentBalance = existingApplicationUser.getBalance();
+        if (currentBalance.subtract(amount).compareTo(BigDecimal.ZERO) < 0) {
+            throw new InsufficientBalanceException("Insufficient balance to perform the deduction");
+        }
+
+        existingApplicationUser.setBalance(currentBalance);
         this.applicationUserService.update(existingApplicationUser);
     }
-
 }

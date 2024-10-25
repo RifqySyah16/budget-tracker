@@ -7,6 +7,8 @@ import com.devland.finalproject.budget_tracker.applicationuser.model.Application
 import com.devland.finalproject.budget_tracker.applicationuser.model.dto.RegisterationResponseDTO;
 import com.devland.finalproject.budget_tracker.expense.model.Expense;
 import com.devland.finalproject.budget_tracker.expense.model.dto.ExpenseResponseDTO;
+import com.devland.finalproject.budget_tracker.goal.model.Goal;
+import com.devland.finalproject.budget_tracker.goal.model.dto.GoalResponseDTO;
 import com.devland.finalproject.budget_tracker.income.model.Income;
 import com.devland.finalproject.budget_tracker.income.model.dto.IncomeResponseDTO;
 import com.devland.finalproject.budget_tracker.transactionhistory.model.dto.TransactionHistoryResponseDTO;
@@ -52,12 +54,17 @@ public class TransactionHistory {
     private Expense expense;
 
     @ManyToOne
+    @JoinColumn(name = "goal_id")
+    private Goal goal;
+
+    @ManyToOne
     @JoinColumn(name = "user_id")
     private ApplicationUser applicationUser;
 
     public TransactionHistoryResponseDTO convertToResponse() {
         IncomeResponseDTO incomeResponseDTO = this.income != null ? this.income.convertToResponse() : null;
         ExpenseResponseDTO expenseResponseDTO = this.expense != null ? this.expense.convertToResponse() : null;
+        GoalResponseDTO goalResponseDTO = this.goal != null ? this.goal.convertToResponse() : null;
         RegisterationResponseDTO registerationResponseDTO = this.applicationUser.convertToResponse();
 
         return TransactionHistoryResponseDTO.builder()
@@ -67,6 +74,7 @@ public class TransactionHistory {
                 .date(this.date)
                 .incomeResponseDTO(incomeResponseDTO)
                 .expenseResponseDTO(expenseResponseDTO)
+                .goalResponseDTO(goalResponseDTO)
                 .registerationResponseDTO(registerationResponseDTO)
                 .build();
     }

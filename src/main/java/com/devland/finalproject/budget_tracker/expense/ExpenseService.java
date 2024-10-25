@@ -47,15 +47,16 @@ public class ExpenseService {
             throw new InvalidExpenseAmountException("Expense amount cannot be negative");
         }
 
+        this.balanceService.decreaseBalance(existingApplicationUser, newExpense.getAmount());
+
         Expense savedExpense = this.expenseRepository.save(newExpense);
-        this.balanceService.updateExpenseBalance(existingApplicationUser, savedExpense.getAmount());
 
         TransactionHistory newTransactionHistory = new TransactionHistory();
-        newTransactionHistory.setApplicationUser(newExpense.getApplicationUser());
-        newTransactionHistory.setAmount(newExpense.getAmount());
-        newTransactionHistory.setDate(newExpense.getDate());
+        newTransactionHistory.setApplicationUser(savedExpense.getApplicationUser());
+        newTransactionHistory.setAmount(savedExpense.getAmount());
+        newTransactionHistory.setDate(savedExpense.getDate());
         newTransactionHistory.setTransactionType(TransactionType.EXPENSE);
-        newTransactionHistory.setExpense(newExpense);
+        newTransactionHistory.setExpense(savedExpense);
 
         this.transactionHistoryService.add(newTransactionHistory);
 
