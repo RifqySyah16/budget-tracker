@@ -5,7 +5,9 @@ import java.util.List;
 
 import com.devland.finalproject.budget_tracker.applicationuser.model.dto.RegisterationResponseDTO;
 import com.devland.finalproject.budget_tracker.expense.model.Expense;
+import com.devland.finalproject.budget_tracker.goal.model.Goal;
 import com.devland.finalproject.budget_tracker.income.model.Income;
+import com.devland.finalproject.budget_tracker.transactionhistory.model.TransactionHistory;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -44,6 +46,12 @@ public class ApplicationUser {
 
     @OneToMany
     private List<Expense> expenses;
+
+    @OneToMany
+    private List<Goal> goals;
+
+    @OneToMany
+    private List<TransactionHistory> transactionHistories;
 
     public RegisterationResponseDTO convertToResponse() {
         return RegisterationResponseDTO.builder()

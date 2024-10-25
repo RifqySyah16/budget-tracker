@@ -12,6 +12,9 @@ import com.devland.finalproject.budget_tracker.applicationuser.model.Application
 import com.devland.finalproject.budget_tracker.balance.BalanceService;
 import com.devland.finalproject.budget_tracker.expense.model.Expense;
 import com.devland.finalproject.budget_tracker.expense.model.ExpenseCategory;
+import com.devland.finalproject.budget_tracker.transactionhistory.TransactionHistoryService;
+import com.devland.finalproject.budget_tracker.transactionhistory.model.TransactionHistory;
+import com.devland.finalproject.budget_tracker.transactionhistory.model.TransactionType;
 
 import lombok.RequiredArgsConstructor;
 
@@ -21,6 +24,7 @@ public class ExpenseService {
     private final BalanceService balanceService;
     private final ExpenseRepository expenseRepository;
     private final ApplicationUserService applicationUserService;
+    private final TransactionHistoryService transactionHistoryService;
 
     public Page<Expense> getAll(Long userId, Optional<ExpenseCategory> optionalCategory, Pageable pageable) {
         if (optionalCategory.isPresent()) {
@@ -45,6 +49,15 @@ public class ExpenseService {
 
         Expense savedExpense = this.expenseRepository.save(newExpense);
         this.balanceService.updateExpenseBalance(existingApplicationUser, savedExpense.getAmount());
+
+        TransactionHistory newTransactionHistory = new TransactionHistory();
+        newTransactionHistory.setApplicationUser(newExpense.getApplicationUser());
+        newTransactionHistory.setAmount(newExpense.getAmount());
+        newTransactionHistory.setDate(newExpense.getDate());
+        newTransactionHistory.setTransactionType(TransactionType.EXPENSE);
+        newTransactionHistory.setExpense(newExpense);
+
+        this.transactionHistoryService.add(newTransactionHistory);
 
         return savedExpense;
     }

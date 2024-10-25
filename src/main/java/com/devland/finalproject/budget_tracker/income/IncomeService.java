@@ -12,6 +12,9 @@ import com.devland.finalproject.budget_tracker.applicationuser.model.Application
 import com.devland.finalproject.budget_tracker.balance.BalanceService;
 import com.devland.finalproject.budget_tracker.income.model.Income;
 import com.devland.finalproject.budget_tracker.income.model.IncomeCategory;
+import com.devland.finalproject.budget_tracker.transactionhistory.TransactionHistoryService;
+import com.devland.finalproject.budget_tracker.transactionhistory.model.TransactionHistory;
+import com.devland.finalproject.budget_tracker.transactionhistory.model.TransactionType;
 
 import lombok.RequiredArgsConstructor;
 
@@ -21,6 +24,7 @@ public class IncomeService {
     private final BalanceService balanceService;
     private final IncomeRepository incomeRepository;
     private final ApplicationUserService applicationUserService;
+    private final TransactionHistoryService transactionHistoryService;
 
     public Page<Income> getAll(Long userId, Optional<IncomeCategory> optionalCategory, Pageable pageable) {
         if (optionalCategory.isPresent()) {
@@ -45,6 +49,15 @@ public class IncomeService {
 
         Income savedIncome = this.incomeRepository.save(newiIncome);
         this.balanceService.updateIncomeBalance(existingUser, savedIncome.getAmount());
+
+        TransactionHistory newTransactionHistory = new TransactionHistory();
+        newTransactionHistory.setApplicationUser(newiIncome.getApplicationUser());
+        newTransactionHistory.setAmount(newiIncome.getAmount());
+        newTransactionHistory.setDate(newiIncome.getDate());
+        newTransactionHistory.setTransactionType(TransactionType.INCOME);
+        newTransactionHistory.setIncome(newiIncome);
+
+        this.transactionHistoryService.add(newTransactionHistory);
 
         return savedIncome;
     }

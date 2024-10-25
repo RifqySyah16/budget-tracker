@@ -1,13 +1,15 @@
-package com.devland.finalproject.budget_tracker.income.model;
+package com.devland.finalproject.budget_tracker.transactionhistory.model;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.util.List;
 
 import com.devland.finalproject.budget_tracker.applicationuser.model.ApplicationUser;
 import com.devland.finalproject.budget_tracker.applicationuser.model.dto.RegisterationResponseDTO;
+import com.devland.finalproject.budget_tracker.expense.model.Expense;
+import com.devland.finalproject.budget_tracker.expense.model.dto.ExpenseResponseDTO;
+import com.devland.finalproject.budget_tracker.income.model.Income;
 import com.devland.finalproject.budget_tracker.income.model.dto.IncomeResponseDTO;
-import com.devland.finalproject.budget_tracker.transactionhistory.model.TransactionHistory;
+import com.devland.finalproject.budget_tracker.transactionhistory.model.dto.TransactionHistoryResponseDTO;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -17,7 +19,6 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -30,33 +31,42 @@ import lombok.Setter;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class Income {
+public class TransactionHistory {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Enumerated(EnumType.STRING)
+    private TransactionType transactionType;
+
     private BigDecimal amount;
 
-    @Enumerated(EnumType.STRING)
-    private IncomeCategory incomeCategory;
-
     private LocalDate date;
+
+    @ManyToOne
+    @JoinColumn(name = "income_id")
+    private Income income;
+
+    @ManyToOne
+    @JoinColumn(name = "expense_id")
+    private Expense expense;
 
     @ManyToOne
     @JoinColumn(name = "user_id")
     private ApplicationUser applicationUser;
 
-    @OneToMany
-    private List<TransactionHistory> transactionHistories;
-
-    public IncomeResponseDTO convertToResponse() {
+    public TransactionHistoryResponseDTO convertToResponse() {
+        IncomeResponseDTO incomeResponseDTO = this.income != null ? this.income.convertToResponse() : null;
+        ExpenseResponseDTO expenseResponseDTO = this.expense != null ? this.expense.convertToResponse() : null;
         RegisterationResponseDTO registerationResponseDTO = this.applicationUser.convertToResponse();
 
-        return IncomeResponseDTO.builder()
+        return TransactionHistoryResponseDTO.builder()
                 .id(this.id)
+                .transactionType(this.transactionType)
                 .amount(this.amount)
-                .incomeCategory(this.incomeCategory)
                 .date(this.date)
+                .incomeResponseDTO(incomeResponseDTO)
+                .expenseResponseDTO(expenseResponseDTO)
                 .registerationResponseDTO(registerationResponseDTO)
                 .build();
     }
