@@ -1,6 +1,7 @@
 package com.devland.finalproject.budget_tracker.goal.model.dto;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 
 import com.devland.finalproject.budget_tracker.applicationuser.model.ApplicationUser;
 import com.devland.finalproject.budget_tracker.applicationuser.model.dto.UserGoalRequestDTO;
@@ -33,6 +34,9 @@ public class GoalRequestDTO {
     @NotNull(message = "Target is required")
     private BigDecimal target;
 
+    @NotNull(message = "Date is required")
+    private LocalDate date;
+
     @Valid
     private UserGoalRequestDTO userGoalRequestDTO;
 
@@ -45,6 +49,7 @@ public class GoalRequestDTO {
                 .description(this.description)
                 .progress(this.progress)
                 .target(this.target)
+                .date(this.date)
                 .applicationUser(applicationUser)
                 .build();
     }

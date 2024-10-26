@@ -25,8 +25,8 @@ public class BalanceService {
         if (currentBalance.subtract(amount).compareTo(BigDecimal.ZERO) < 0) {
             throw new InsufficientBalanceException("Insufficient balance to perform the deduction");
         }
-
-        existingApplicationUser.setBalance(currentBalance);
+        BigDecimal remaingBalance = currentBalance.subtract(amount);
+        existingApplicationUser.setBalance(remaingBalance);
         this.applicationUserService.update(existingApplicationUser);
     }
 }

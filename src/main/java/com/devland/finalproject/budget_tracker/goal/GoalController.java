@@ -25,6 +25,7 @@ import com.devland.finalproject.budget_tracker.goal.model.dto.GoalProgressReques
 import com.devland.finalproject.budget_tracker.goal.model.dto.GoalRequestDTO;
 import com.devland.finalproject.budget_tracker.goal.model.dto.GoalResponseDTO;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
 @RestController
@@ -65,7 +66,7 @@ public class GoalController {
     }
 
     @PostMapping
-    public ResponseEntity<GoalResponseDTO> create(@RequestBody GoalRequestDTO goalRequestDTO,
+    public ResponseEntity<GoalResponseDTO> create(@RequestBody @Valid GoalRequestDTO goalRequestDTO,
             Authentication authentication) {
         UserPrincipal userPrincipal = (UserPrincipal) authentication.getPrincipal();
         Long userId = userPrincipal.getId();
