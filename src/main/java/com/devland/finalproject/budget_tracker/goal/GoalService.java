@@ -1,5 +1,6 @@
 package com.devland.finalproject.budget_tracker.goal;
 
+import java.math.BigDecimal;
 import java.util.Optional;
 
 import org.springframework.data.domain.Page;
@@ -70,9 +71,19 @@ public class GoalService {
     public Goal incrementProgress(Long id, Long userId, Goal updatedGoal) {
         Goal existingGoal = this.getOne(id, userId);
 
+        BigDecimal newProgress = existingGoal.getProgress().add(updatedGoal.getProgress());
+        if (newProgress.compareTo(existingGoal.getTarget()) >= 0) {
+            throw new GoalCompletedException("Goal progress has reached or exceeded the target amount.");
+        }
+
+        existingGoal.setProgress(newProgress);
+
         this.balanceService.decreaseBalance(existingGoal.getApplicationUser(), updatedGoal.getProgress());
 
-        Goal savedGoal = this.goalRepository.save(updatedGoal);
+        ApplicationUser existingUser = this.applicationUserService.getOne(updatedGoal.getApplicationUser().getId());
+        updatedGoal.setApplicationUser(existingUser);
+
+        Goal savedGoal = this.goalRepository.save(existingGoal);
 
         TransactionHistory newTransactionHistory = new TransactionHistory();
         newTransactionHistory.setApplicationUser(savedGoal.getApplicationUser());
@@ -94,12 +105,12 @@ public class GoalService {
     }
 
     public void delete(Long id, Long userId) {
-        Goal existingGoal = this.getOne(id, userId);
-        this.goalRepository.deleteById(existingGoal.getId());
+        this.getOne(id, userId);
+        this.goalRepository.deleteById(id);
     }
 
     private void validationUserById(Goal goal, Long userId) {
-        if (goal.getApplicationUser().getId().equals(userId)) {
+        if (!goal.getApplicationUser().getId().equals(userId)) {
             throw new AccessGoalDeniedException("User cannot add goal for another user");
         }
     }

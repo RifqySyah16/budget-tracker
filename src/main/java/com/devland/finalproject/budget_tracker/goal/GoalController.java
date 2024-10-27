@@ -21,7 +21,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.devland.finalproject.budget_tracker.authentication.model.UserPrincipal;
 import com.devland.finalproject.budget_tracker.goal.model.Goal;
-import com.devland.finalproject.budget_tracker.goal.model.dto.GoalProgressRequestDTO;
 import com.devland.finalproject.budget_tracker.goal.model.dto.GoalRequestDTO;
 import com.devland.finalproject.budget_tracker.goal.model.dto.GoalResponseDTO;
 
@@ -82,13 +81,13 @@ public class GoalController {
     @PostMapping("/{id}")
     public ResponseEntity<GoalResponseDTO> incrementProgress(
             @PathVariable("id") Long id,
-            @RequestBody GoalProgressRequestDTO goalProgressRequestDTO,
+            @RequestBody GoalRequestDTO goalRequestDTO,
             Authentication authentication) {
 
         UserPrincipal userPrincipal = (UserPrincipal) authentication.getPrincipal();
         Long userId = userPrincipal.getId();
 
-        Goal updatedGoal = goalProgressRequestDTO.convertToEntity();
+        Goal updatedGoal = goalRequestDTO.convertToEntity();
 
         Goal savedGoal = this.goalService.incrementProgress(id, userId, updatedGoal);
         GoalResponseDTO goalResponseDTO = savedGoal.convertToResponse();
