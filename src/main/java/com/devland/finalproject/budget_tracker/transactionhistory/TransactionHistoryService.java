@@ -7,34 +7,38 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import com.devland.finalproject.budget_tracker.transactionhistory.exception.TransactionNotFoundException;
+import com.devland.finalproject.budget_tracker.applicationuser.ApplicationUserService;
+import com.devland.finalproject.budget_tracker.applicationuser.model.ApplicationUser;
 import com.devland.finalproject.budget_tracker.transactionhistory.model.TransactionHistory;
+import com.devland.finalproject.budget_tracker.transactionhistory.model.TransactionType;
 
 import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
 public class TransactionHistoryService {
+    private final ApplicationUserService applicationUserService;
     private final TransactionHistoryRepository transactionHistoryRepository;
 
-    public Page<TransactionHistory> findAll(Optional<String> optionalCategory, LocalDate startDate, LocalDate endDate,
-            Pageable pageable) {
-        String category = optionalCategory.isPresent() ? optionalCategory.get() : null;
+    public Page<TransactionHistory> getAll(Long userId, Optional<TransactionType> optionalTransactionType,
+            LocalDate startDate, LocalDate endDate, Pageable pageable) {
+        ApplicationUser applicationUser = this.applicationUserService.getOne(userId);
 
-        if (category != null) {
-            return this.transactionHistoryRepository.findAllByDateBetweenAndCategory(startDate, endDate, category,
+        TransactionType transactionType = optionalTransactionType.isPresent() ? optionalTransactionType.get() : null;
+
+        if (transactionType != null) {
+            return this.transactionHistoryRepository.findAllByApplicationUserAndDateBetweenAndTransactionType(
+                    applicationUser,
+                    startDate, endDate,
+                    transactionType,
                     pageable);
         }
 
-        return this.transactionHistoryRepository.findAllByDateBetween(startDate, endDate, pageable);
+        return transactionHistoryRepository.findAllByApplicationUserAndDateBetween(applicationUser, startDate, endDate,
+                pageable);
     }
 
-    public TransactionHistory findById(Long id) {
-        return this.transactionHistoryRepository.findById(id)
-                .orElseThrow(() -> new TransactionNotFoundException("Transaction not found with ID: " + id));
-    }
-
-    public TransactionHistory save(TransactionHistory newTransactionHistory) {
-        return this.transactionHistoryRepository.save(newTransactionHistory);
+    public void add(TransactionHistory newTransactionHistory) {
+        this.transactionHistoryRepository.save(newTransactionHistory);
     }
 }

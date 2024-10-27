@@ -1,5 +1,7 @@
 package com.devland.finalproject.budget_tracker.applicationuser.model.dto;
 
+import java.math.BigDecimal;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -17,4 +19,5 @@ public class RegisterationResponseDTO {
     private String email;
     private String username;
     private String password;
+    private BigDecimal balance;
 }
