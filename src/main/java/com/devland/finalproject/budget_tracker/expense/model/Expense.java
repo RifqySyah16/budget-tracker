@@ -5,7 +5,7 @@ import java.time.LocalDate;
 import java.util.List;
 
 import com.devland.finalproject.budget_tracker.applicationuser.model.ApplicationUser;
-import com.devland.finalproject.budget_tracker.applicationuser.model.dto.RegisterationResponseDTO;
+import com.devland.finalproject.budget_tracker.applicationuser.model.dto.UserResponseDTO;
 import com.devland.finalproject.budget_tracker.expense.model.dto.ExpenseResponseDTO;
 import com.devland.finalproject.budget_tracker.transactionhistory.model.TransactionHistory;
 
@@ -50,14 +50,14 @@ public class Expense {
     private List<TransactionHistory> transactionHistories;
 
     public ExpenseResponseDTO convertToResponse() {
-        RegisterationResponseDTO registerationResponseDTO = this.applicationUser.convertToResponse();
+        UserResponseDTO userResponseDTO = this.applicationUser.convertToUserResponse();
 
         return ExpenseResponseDTO.builder()
                 .id(this.id)
                 .amount(this.amount)
                 .expenseCategory(this.expenseCategory)
                 .date(this.date)
-                .registerationResponseDTO(registerationResponseDTO)
+                .userResponseDTO(userResponseDTO)
                 .build();
     }
 }

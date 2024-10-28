@@ -5,12 +5,11 @@ import java.time.LocalDate;
 import java.util.List;
 
 import com.devland.finalproject.budget_tracker.applicationuser.model.ApplicationUser;
-import com.devland.finalproject.budget_tracker.applicationuser.model.dto.RegisterationResponseDTO;
+import com.devland.finalproject.budget_tracker.applicationuser.model.dto.UserResponseDTO;
 import com.devland.finalproject.budget_tracker.goal.model.dto.GoalResponseDTO;
 import com.devland.finalproject.budget_tracker.transactionhistory.model.TransactionHistory;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -45,9 +44,7 @@ public class Goal {
 
     private LocalDate date;
 
-    // @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
-    @OneToMany(mappedBy = "goal")
-    @JsonIgnore
+    @OneToMany
     private List<TransactionHistory> transactionHistories;
 
     @ManyToOne
@@ -55,7 +52,7 @@ public class Goal {
     private ApplicationUser applicationUser;
 
     public GoalResponseDTO convertToResponse() {
-        RegisterationResponseDTO registerationResponseDTO = this.applicationUser.convertToResponse();
+        UserResponseDTO userResponseDTO = this.applicationUser.convertToUserResponse();
 
         return GoalResponseDTO.builder()
                 .id(this.id)
@@ -64,7 +61,7 @@ public class Goal {
                 .progress(this.progress)
                 .target(this.target)
                 .date(this.date)
-                .registerationResponseDTO(registerationResponseDTO)
+                .userResponseDTO(userResponseDTO)
                 .build();
     }
 }

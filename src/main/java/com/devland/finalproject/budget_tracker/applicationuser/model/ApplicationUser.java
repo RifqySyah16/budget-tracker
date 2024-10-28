@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 import java.util.List;
 
 import com.devland.finalproject.budget_tracker.applicationuser.model.dto.RegisterationResponseDTO;
+import com.devland.finalproject.budget_tracker.applicationuser.model.dto.UserResponseDTO;
 import com.devland.finalproject.budget_tracker.expense.model.Expense;
 import com.devland.finalproject.budget_tracker.goal.model.Goal;
 import com.devland.finalproject.budget_tracker.income.model.Income;
@@ -39,7 +40,8 @@ public class ApplicationUser {
 
     private String password;
 
-    private BigDecimal balance;
+    @Builder.Default
+    private BigDecimal balance = BigDecimal.ZERO;
 
     @OneToMany
     private List<Income> incomes;
@@ -61,6 +63,14 @@ public class ApplicationUser {
                 .username(this.username)
                 .password(password)
                 .balance(this.balance)
+                .build();
+    }
+
+    public UserResponseDTO convertToUserResponse() {
+        return UserResponseDTO.builder()
+                .id(this.id)
+                .username(this.username)
+                .email(this.email)
                 .build();
     }
 }
