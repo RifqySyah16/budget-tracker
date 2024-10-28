@@ -71,6 +71,7 @@ public class ApplicationUser {
                 .id(this.id)
                 .username(this.username)
                 .email(this.email)
+                .balance(this.balance)
                 .build();
     }
 }

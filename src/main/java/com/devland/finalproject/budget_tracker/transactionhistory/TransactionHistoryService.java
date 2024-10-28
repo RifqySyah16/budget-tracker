@@ -77,4 +77,15 @@ public class TransactionHistoryService {
 
         this.add(goalTransactionHistory);
     }
+
+    public void createIncreaseGoalHistory(Goal savedGoal) {
+        TransactionHistory increaseGoalTransactionHistory = new TransactionHistory();
+        increaseGoalTransactionHistory.setApplicationUser(savedGoal.getApplicationUser());
+        increaseGoalTransactionHistory.setAmount(savedGoal.getProgress());
+        increaseGoalTransactionHistory.setDate(savedGoal.getDate());
+        increaseGoalTransactionHistory.setTransactionType(TransactionType.GOAL);
+        increaseGoalTransactionHistory.setGoal(savedGoal);
+
+        this.add(increaseGoalTransactionHistory);
+    }
 }

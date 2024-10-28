@@ -12,8 +12,6 @@ import com.devland.finalproject.budget_tracker.applicationuser.balance.BalanceSe
 import com.devland.finalproject.budget_tracker.applicationuser.model.ApplicationUser;
 import com.devland.finalproject.budget_tracker.goal.model.Goal;
 import com.devland.finalproject.budget_tracker.transactionhistory.TransactionHistoryService;
-import com.devland.finalproject.budget_tracker.transactionhistory.model.TransactionHistory;
-import com.devland.finalproject.budget_tracker.transactionhistory.model.TransactionType;
 
 import lombok.RequiredArgsConstructor;
 
@@ -35,14 +33,13 @@ public class GoalService {
     }
 
     public Goal getOne(Long id, Long userId) {
-        Goal goal = this.goalRepository.findById(id).orElseThrow(() -> new GoalNotFoundException("Goal not found"));
-        validationUserById(goal, userId);
+        validationUserById(userId);
 
-        return goal;
+        return this.goalRepository.findById(id).orElseThrow(() -> new GoalNotFoundException("Goal not found"));
     }
 
     public Goal create(Goal newGoal, Long userId) {
-        this.validationUserById(newGoal, userId);
+        this.validationUserById(userId);
 
         Optional<Goal> existingGoal = this.goalRepository.findByApplicationUserIdAndName(userId, newGoal.getName());
         if (existingGoal.isPresent()) {
@@ -56,20 +53,14 @@ public class GoalService {
 
         Goal savedGoal = this.goalRepository.save(newGoal);
 
-        TransactionHistory newTransactionHistory = new TransactionHistory();
-        newTransactionHistory.setApplicationUser(savedGoal.getApplicationUser());
-        newTransactionHistory.setAmount(savedGoal.getProgress());
-        newTransactionHistory.setDate(savedGoal.getDate());
-        newTransactionHistory.setTransactionType(TransactionType.GOAL);
-        newTransactionHistory.setGoal(savedGoal);
-
-        this.transactionHistoryService.add(newTransactionHistory);
+        this.transactionHistoryService.createGoalHistory(savedGoal);
 
         return savedGoal;
     }
 
     public Goal incrementProgress(Long id, Long userId, Goal updatedGoal) {
         Goal existingGoal = this.getOne(id, userId);
+        this.validationUserById(userId);
 
         BigDecimal newProgress = existingGoal.getProgress().add(updatedGoal.getProgress());
         if (newProgress.compareTo(existingGoal.getTarget()) >= 0) {
@@ -80,12 +71,12 @@ public class GoalService {
 
         this.balanceService.decreaseBalance(existingGoal.getApplicationUser(), updatedGoal.getProgress());
 
-        ApplicationUser existingUser = this.applicationUserService.getOne(updatedGoal.getApplicationUser().getId());
+        ApplicationUser existingUser = this.applicationUserService.getOne(userId);
         updatedGoal.setApplicationUser(existingUser);
 
         Goal savedGoal = this.goalRepository.save(existingGoal);
 
-        this.transactionHistoryService.createGoalHistory(savedGoal);
+        this.transactionHistoryService.createIncreaseGoalHistory(savedGoal);
 
         return savedGoal;
     }
@@ -102,8 +93,8 @@ public class GoalService {
         this.goalRepository.deleteById(id);
     }
 
-    private void validationUserById(Goal goal, Long userId) {
-        if (!goal.getApplicationUser().getId().equals(userId)) {
+    private void validationUserById(Long userId) {
+        if (userId == null) {
             throw new AccessGoalDeniedException("User cannot add goal for another user");
         }
     }
