@@ -5,7 +5,7 @@ import java.time.LocalDate;
 import java.util.List;
 
 import com.devland.finalproject.budget_tracker.applicationuser.model.ApplicationUser;
-import com.devland.finalproject.budget_tracker.applicationuser.model.dto.RegisterationResponseDTO;
+import com.devland.finalproject.budget_tracker.applicationuser.model.dto.UserResponseDTO;
 import com.devland.finalproject.budget_tracker.goal.model.dto.GoalResponseDTO;
 import com.devland.finalproject.budget_tracker.transactionhistory.model.TransactionHistory;
 
@@ -51,7 +51,7 @@ public class Goal {
     private ApplicationUser applicationUser;
 
     public GoalResponseDTO convertToResponse() {
-        RegisterationResponseDTO registerationResponseDTO = this.applicationUser.convertToResponse();
+        UserResponseDTO userResponseDTO = this.applicationUser.convertToUserResponse();
 
         return GoalResponseDTO.builder()
                 .id(this.id)
@@ -60,7 +60,7 @@ public class Goal {
                 .progress(this.progress)
                 .target(this.target)
                 .date(this.date)
-                .registerationResponseDTO(registerationResponseDTO)
+                .userResponseDTO(userResponseDTO)
                 .build();
     }
 }

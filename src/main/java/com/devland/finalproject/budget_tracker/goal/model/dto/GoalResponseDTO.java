@@ -3,7 +3,7 @@ package com.devland.finalproject.budget_tracker.goal.model.dto;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
-import com.devland.finalproject.budget_tracker.applicationuser.model.dto.RegisterationResponseDTO;
+import com.devland.finalproject.budget_tracker.applicationuser.model.dto.UserResponseDTO;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -23,5 +23,5 @@ public class GoalResponseDTO {
     private BigDecimal progress;
     private BigDecimal target;
     private LocalDate date;
-    private RegisterationResponseDTO registerationResponseDTO;
+    private UserResponseDTO userResponseDTO;
 }

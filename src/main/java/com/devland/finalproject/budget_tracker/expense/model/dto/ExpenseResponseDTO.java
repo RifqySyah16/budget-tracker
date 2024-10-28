@@ -3,7 +3,7 @@ package com.devland.finalproject.budget_tracker.expense.model.dto;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
-import com.devland.finalproject.budget_tracker.applicationuser.model.dto.RegisterationResponseDTO;
+import com.devland.finalproject.budget_tracker.applicationuser.model.dto.UserResponseDTO;
 import com.devland.finalproject.budget_tracker.expense.model.ExpenseCategory;
 
 import lombok.AllArgsConstructor;
@@ -22,5 +22,5 @@ public class ExpenseResponseDTO {
     private BigDecimal amount;
     private ExpenseCategory expenseCategory;
     private LocalDate date;
-    private RegisterationResponseDTO registerationResponseDTO;
+    private UserResponseDTO userResponseDTO;
 }
