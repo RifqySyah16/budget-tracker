@@ -1,4 +1,4 @@
-package com.devland.finalproject.budget_tracker.balance;
+package com.devland.finalproject.budget_tracker.applicationuser.balance;
 
 import java.math.BigDecimal;
 

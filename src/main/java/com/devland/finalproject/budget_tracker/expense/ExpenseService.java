@@ -8,13 +8,11 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.devland.finalproject.budget_tracker.applicationuser.ApplicationUserService;
+import com.devland.finalproject.budget_tracker.applicationuser.balance.BalanceService;
 import com.devland.finalproject.budget_tracker.applicationuser.model.ApplicationUser;
-import com.devland.finalproject.budget_tracker.balance.BalanceService;
 import com.devland.finalproject.budget_tracker.expense.model.Expense;
 import com.devland.finalproject.budget_tracker.expense.model.ExpenseCategory;
 import com.devland.finalproject.budget_tracker.transactionhistory.TransactionHistoryService;
-import com.devland.finalproject.budget_tracker.transactionhistory.model.TransactionHistory;
-import com.devland.finalproject.budget_tracker.transactionhistory.model.TransactionType;
 
 import lombok.RequiredArgsConstructor;
 
@@ -51,16 +49,8 @@ public class ExpenseService {
 
         Expense savedExpense = this.expenseRepository.save(newExpense);
 
-        TransactionHistory newTransactionHistory = new TransactionHistory();
-        newTransactionHistory.setApplicationUser(savedExpense.getApplicationUser());
-        newTransactionHistory.setAmount(savedExpense.getAmount());
-        newTransactionHistory.setDate(savedExpense.getDate());
-        newTransactionHistory.setTransactionType(TransactionType.EXPENSE);
-        newTransactionHistory.setExpense(savedExpense);
-
-        this.transactionHistoryService.add(newTransactionHistory);
+        this.transactionHistoryService.createExpenseHistory(savedExpense);
 
         return savedExpense;
     }
-
 }

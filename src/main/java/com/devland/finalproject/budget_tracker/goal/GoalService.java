@@ -8,8 +8,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.devland.finalproject.budget_tracker.applicationuser.ApplicationUserService;
+import com.devland.finalproject.budget_tracker.applicationuser.balance.BalanceService;
 import com.devland.finalproject.budget_tracker.applicationuser.model.ApplicationUser;
-import com.devland.finalproject.budget_tracker.balance.BalanceService;
 import com.devland.finalproject.budget_tracker.goal.model.Goal;
 import com.devland.finalproject.budget_tracker.transactionhistory.TransactionHistoryService;
 import com.devland.finalproject.budget_tracker.transactionhistory.model.TransactionHistory;
@@ -73,7 +73,7 @@ public class GoalService {
 
         BigDecimal newProgress = existingGoal.getProgress().add(updatedGoal.getProgress());
         if (newProgress.compareTo(existingGoal.getTarget()) >= 0) {
-            throw new GoalCompletedException("Goal progress has reached or exceeded the target amount.");
+            throw new ExceedeGoalTargetException("Goal progress has reached or exceeded the target amount.");
         }
 
         existingGoal.setProgress(newProgress);
@@ -85,14 +85,7 @@ public class GoalService {
 
         Goal savedGoal = this.goalRepository.save(existingGoal);
 
-        TransactionHistory newTransactionHistory = new TransactionHistory();
-        newTransactionHistory.setApplicationUser(savedGoal.getApplicationUser());
-        newTransactionHistory.setAmount(savedGoal.getProgress());
-        newTransactionHistory.setDate(savedGoal.getDate());
-        newTransactionHistory.setTransactionType(TransactionType.GOAL);
-        newTransactionHistory.setGoal(savedGoal);
-
-        this.transactionHistoryService.add(newTransactionHistory);
+        this.transactionHistoryService.createGoalHistory(savedGoal);
 
         return savedGoal;
     }
