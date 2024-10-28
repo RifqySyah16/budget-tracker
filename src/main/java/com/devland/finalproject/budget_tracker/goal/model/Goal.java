@@ -8,6 +8,7 @@ import com.devland.finalproject.budget_tracker.applicationuser.model.Application
 import com.devland.finalproject.budget_tracker.applicationuser.model.dto.RegisterationResponseDTO;
 import com.devland.finalproject.budget_tracker.goal.model.dto.GoalResponseDTO;
 import com.devland.finalproject.budget_tracker.transactionhistory.model.TransactionHistory;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
@@ -44,7 +45,9 @@ public class Goal {
 
     private LocalDate date;
 
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    // @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "goal")
+    @JsonIgnore
     private List<TransactionHistory> transactionHistories;
 
     @ManyToOne
