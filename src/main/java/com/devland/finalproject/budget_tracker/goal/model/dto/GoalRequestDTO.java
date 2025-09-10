@@ -1,6 +1,7 @@
 package com.devland.finalproject.budget_tracker.goal.model.dto;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 
 import com.devland.finalproject.budget_tracker.applicationuser.model.ApplicationUser;
 import com.devland.finalproject.budget_tracker.goal.model.Goal;
@@ -38,7 +39,7 @@ public class GoalRequestDTO {
                 .description(this.description)
                 .progress(this.progress)
                 .target(this.target)
-                .applicationUser(applicationUser)
+                .date(this.date)
                 .build();
     }
 }

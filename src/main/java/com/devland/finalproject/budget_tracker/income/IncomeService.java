@@ -8,11 +8,13 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.devland.finalproject.budget_tracker.applicationuser.ApplicationUserService;
+import com.devland.finalproject.budget_tracker.applicationuser.balance.BalanceService;
 import com.devland.finalproject.budget_tracker.applicationuser.model.ApplicationUser;
 import com.devland.finalproject.budget_tracker.income.model.Income;
 import com.devland.finalproject.budget_tracker.income.model.IncomeCategory;
 import com.devland.finalproject.budget_tracker.transactionhistory.TransactionHistoryService;
 import com.devland.finalproject.budget_tracker.transactionhistory.model.TransactionHistory;
+
 
 import lombok.RequiredArgsConstructor;
 

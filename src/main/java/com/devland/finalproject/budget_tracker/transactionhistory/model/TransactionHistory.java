@@ -6,7 +6,7 @@ import java.sql.Timestamp;
 import org.hibernate.annotations.CreationTimestamp;
 
 import com.devland.finalproject.budget_tracker.applicationuser.model.ApplicationUser;
-import com.devland.finalproject.budget_tracker.applicationuser.model.dto.RegisterationResponseDTO;
+import com.devland.finalproject.budget_tracker.applicationuser.model.dto.UserResponseDTO;
 import com.devland.finalproject.budget_tracker.expense.model.Expense;
 import com.devland.finalproject.budget_tracker.expense.model.dto.ExpenseResponseDTO;
 import com.devland.finalproject.budget_tracker.goal.model.Goal;
@@ -68,7 +68,7 @@ public class TransactionHistory {
         IncomeResponseDTO incomeResponseDTO = this.income != null ? this.income.convertToResponse() : null;
         ExpenseResponseDTO expenseResponseDTO = this.expense != null ? this.expense.convertToResponse() : null;
         GoalResponseDTO goalResponseDTO = this.goal != null ? this.goal.convertToResponse() : null;
-        RegisterationResponseDTO registerationResponseDTO = this.applicationUser.convertToResponse();
+        UserResponseDTO userResponseDTO = this.applicationUser.convertToUserResponse();
 
         return TransactionHistoryResponseDTO.builder()
                 .id(this.id)
@@ -78,10 +78,10 @@ public class TransactionHistory {
                 .incomeResponseDTO(incomeResponseDTO)
                 .expenseResponseDTO(expenseResponseDTO)
                 .goalResponseDTO(goalResponseDTO)
-                .registerationResponseDTO(registerationResponseDTO)
+                .userResponseDTO(userResponseDTO)
                 .build();
     }
-
+  
     public static TransactionHistory fromExpense(Expense savedExpense) {
         return TransactionHistory.builder()
                 .applicationUser(savedExpense.getApplicationUser())

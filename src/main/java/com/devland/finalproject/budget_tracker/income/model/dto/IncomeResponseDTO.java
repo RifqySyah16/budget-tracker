@@ -3,7 +3,7 @@ package com.devland.finalproject.budget_tracker.income.model.dto;
 import java.math.BigDecimal;
 import java.sql.Timestamp;
 
-import com.devland.finalproject.budget_tracker.applicationuser.model.dto.RegisterationResponseDTO;
+import com.devland.finalproject.budget_tracker.applicationuser.model.dto.UserResponseDTO;
 import com.devland.finalproject.budget_tracker.income.model.IncomeCategory;
 
 import lombok.AllArgsConstructor;

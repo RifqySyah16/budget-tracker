@@ -9,6 +9,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -23,15 +24,16 @@ import com.devland.finalproject.budget_tracker.applicationuser.ApplicationUserSe
 import com.devland.finalproject.budget_tracker.applicationuser.model.ApplicationUser;
 import com.devland.finalproject.budget_tracker.authentication.model.UserPrincipal;
 import com.devland.finalproject.budget_tracker.goal.model.Goal;
-import com.devland.finalproject.budget_tracker.goal.model.dto.GoalProgressRequestDTO;
 import com.devland.finalproject.budget_tracker.goal.model.dto.GoalRequestDTO;
 import com.devland.finalproject.budget_tracker.goal.model.dto.GoalResponseDTO;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/goals")
+@CrossOrigin(maxAge = 3600)
 public class GoalController {
     private final GoalService goalService;
     private final ApplicationUserService applicationUserService;
@@ -68,7 +70,7 @@ public class GoalController {
     }
 
     @PostMapping
-    public ResponseEntity<GoalResponseDTO> create(@RequestBody GoalRequestDTO goalRequestDTO,
+    public ResponseEntity<GoalResponseDTO> create(@RequestBody @Valid GoalRequestDTO goalRequestDTO,
             Authentication authentication) {
         UserPrincipal userPrincipal = (UserPrincipal) authentication.getPrincipal();
         Long userId = userPrincipal.getId();
@@ -86,13 +88,13 @@ public class GoalController {
     @PostMapping("/{id}")
     public ResponseEntity<GoalResponseDTO> incrementProgress(
             @PathVariable("id") Long id,
-            @RequestBody GoalProgressRequestDTO goalProgressRequestDTO,
+            @RequestBody GoalRequestDTO goalRequestDTO,
             Authentication authentication) {
 
         UserPrincipal userPrincipal = (UserPrincipal) authentication.getPrincipal();
         Long userId = userPrincipal.getId();
 
-        Goal updatedGoal = goalProgressRequestDTO.convertToEntity();
+        Goal updatedGoal = goalRequestDTO.convertToEntity();
 
         Goal savedGoal = this.goalService.incrementProgress(id, userId, updatedGoal.getProgress());
         GoalResponseDTO goalResponseDTO = savedGoal.convertToResponse();
@@ -116,7 +118,7 @@ public class GoalController {
         return ResponseEntity.ok(goalResponseDTO);
     }
 
-    @DeleteMapping("id")
+    @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable("id") Long id, Authentication authentication) {
         UserPrincipal userPrincipal = (UserPrincipal) authentication.getPrincipal();
         Long userId = userPrincipal.getId();

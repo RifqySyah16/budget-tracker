@@ -8,6 +8,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.devland.finalproject.budget_tracker.applicationuser.ApplicationUserService;
+import com.devland.finalproject.budget_tracker.applicationuser.balance.BalanceService;
 import com.devland.finalproject.budget_tracker.applicationuser.model.ApplicationUser;
 import com.devland.finalproject.budget_tracker.goal.model.Goal;
 import com.devland.finalproject.budget_tracker.transactionhistory.TransactionHistoryService;
@@ -33,8 +34,7 @@ public class GoalService {
     }
 
     public Goal getOne(Long id, Long userId) {
-        Goal goal = this.goalRepository.findById(id).orElseThrow(() -> new GoalNotFoundException("Goal not found"));
-        validationUserById(goal, userId);
+        validationUserById(userId);
 
         this.validationUserById(goal, userId);
 
@@ -92,8 +92,8 @@ public class GoalService {
     }
 
     public void delete(Long id, Long userId) {
-        Goal existingGoal = this.getOne(id, userId);
-        this.goalRepository.deleteById(existingGoal.getId());
+        this.getOne(id, userId);
+        this.goalRepository.deleteById(id);
     }
 
     private void validationUserById(Goal goal, Long userId) {

@@ -8,6 +8,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.devland.finalproject.budget_tracker.applicationuser.ApplicationUserService;
+import com.devland.finalproject.budget_tracker.applicationuser.balance.BalanceService;
 import com.devland.finalproject.budget_tracker.applicationuser.model.ApplicationUser;
 import com.devland.finalproject.budget_tracker.expense.model.Expense;
 import com.devland.finalproject.budget_tracker.expense.model.ExpenseCategory;
@@ -59,5 +60,4 @@ public class ExpenseService {
             throw new InvalidExpenseAmountException("Expense amount cannot be zero or negative");
         }
     }
-
 }
