@@ -10,7 +10,7 @@ import com.devland.finalproject.budget_tracker.goal.model.Goal;
 
 public interface GoalRepository extends JpaRepository<Goal, Long> {
 
-    Page<Goal> findAllByApplicationUserIdAndNameContainsIgnoreCase(Long userId, Goal goal, Pageable pageable);
+    Page<Goal> findAllByApplicationUserIdAndNameContainsIgnoreCase(Long userId, String name, Pageable pageable);
 
     Page<Goal> findAllByApplicationUserId(Long userId, Pageable pageable);
 

@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.devland.finalproject.budget_tracker.applicationuser.ApplicationUserService;
+import com.devland.finalproject.budget_tracker.applicationuser.model.ApplicationUser;
 import com.devland.finalproject.budget_tracker.authentication.model.UserPrincipal;
 import com.devland.finalproject.budget_tracker.income.model.Income;
 import com.devland.finalproject.budget_tracker.income.model.IncomeCategory;
@@ -60,7 +61,9 @@ public class IncomeController {
         UserPrincipal userPrincipal = (UserPrincipal) authentication.getPrincipal();
         Long userId = userPrincipal.getId();
 
-        Income newiIncome = incomeRequestDTO.convertToEntity();
+        ApplicationUser applicationUser = this.applicationUserService.getOne(userId);
+
+        Income newiIncome = incomeRequestDTO.convertToEntity(applicationUser);
         newiIncome.setApplicationUser(this.applicationUserService.getOne(userId));
 
         Income savedIncome = this.incomeService.add(newiIncome, userId);

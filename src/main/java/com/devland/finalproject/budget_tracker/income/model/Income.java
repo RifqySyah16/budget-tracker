@@ -1,8 +1,10 @@
 package com.devland.finalproject.budget_tracker.income.model;
 
 import java.math.BigDecimal;
-import java.time.LocalDate;
+import java.sql.Timestamp;
 import java.util.List;
+
+import org.hibernate.annotations.CreationTimestamp;
 
 import com.devland.finalproject.budget_tracker.applicationuser.model.ApplicationUser;
 import com.devland.finalproject.budget_tracker.applicationuser.model.dto.RegisterationResponseDTO;
@@ -40,7 +42,8 @@ public class Income {
     @Enumerated(EnumType.STRING)
     private IncomeCategory incomeCategory;
 
-    private LocalDate date;
+    @CreationTimestamp
+    private Timestamp date;
 
     @ManyToOne
     @JoinColumn(name = "user_id")

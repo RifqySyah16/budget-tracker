@@ -9,19 +9,16 @@ import org.springframework.stereotype.Service;
 
 import com.devland.finalproject.budget_tracker.applicationuser.ApplicationUserService;
 import com.devland.finalproject.budget_tracker.applicationuser.model.ApplicationUser;
-import com.devland.finalproject.budget_tracker.balance.BalanceService;
 import com.devland.finalproject.budget_tracker.expense.model.Expense;
 import com.devland.finalproject.budget_tracker.expense.model.ExpenseCategory;
 import com.devland.finalproject.budget_tracker.transactionhistory.TransactionHistoryService;
 import com.devland.finalproject.budget_tracker.transactionhistory.model.TransactionHistory;
-import com.devland.finalproject.budget_tracker.transactionhistory.model.TransactionType;
 
 import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
 public class ExpenseService {
-    private final BalanceService balanceService;
     private final ExpenseRepository expenseRepository;
     private final ApplicationUserService applicationUserService;
     private final TransactionHistoryService transactionHistoryService;
@@ -36,31 +33,31 @@ public class ExpenseService {
     }
 
     public Expense add(Long userId, Expense newExpense) {
-        if (!newExpense.getApplicationUser().getId().equals(userId)) {
-            throw new AccessExpenseDeniedException("User cannot add income for another user.");
-        }
+        this.validateExpenseOwnership(newExpense, userId);
+        this.validateExpenseAmount(newExpense);
 
-        ApplicationUser existingApplicationUser = this.applicationUserService.getOne(userId);
-        newExpense.setApplicationUser(existingApplicationUser);
+        ApplicationUser existingUser = this.applicationUserService.getOne(userId);
+        newExpense.setApplicationUser(existingUser);
 
-        if (newExpense.getAmount().compareTo(BigDecimal.ZERO) < 0) {
-            throw new InvalidExpenseAmountException("Expense amount cannot be negative");
-        }
-
-        this.balanceService.decreaseBalance(existingApplicationUser, newExpense.getAmount());
+        existingUser.setBalance(existingUser.getBalance().decrease(newExpense.getAmount()));
 
         Expense savedExpense = this.expenseRepository.save(newExpense);
 
-        TransactionHistory newTransactionHistory = new TransactionHistory();
-        newTransactionHistory.setApplicationUser(savedExpense.getApplicationUser());
-        newTransactionHistory.setAmount(savedExpense.getAmount());
-        newTransactionHistory.setDate(savedExpense.getDate());
-        newTransactionHistory.setTransactionType(TransactionType.EXPENSE);
-        newTransactionHistory.setExpense(savedExpense);
-
-        this.transactionHistoryService.add(newTransactionHistory);
+        this.transactionHistoryService.add(TransactionHistory.fromExpense(savedExpense));
 
         return savedExpense;
+    }
+
+    public void validateExpenseOwnership(Expense expense, Long userId) {
+        if (!expense.getApplicationUser().getId().equals(userId)) {
+            throw new AccessExpenseDeniedException("User cannot add expense for another user.");
+        }
+    }
+
+    private void validateExpenseAmount(Expense expense) {
+        if (expense.getAmount().compareTo(BigDecimal.ZERO) <= 0) {
+            throw new InvalidExpenseAmountException("Expense amount cannot be zero or negative");
+        }
     }
 
 }
