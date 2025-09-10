@@ -1,12 +1,12 @@
-package com.devland.finalproject.budget_tracker.income;
+package com.devland.finalproject.budget_tracker.goal;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 @ResponseStatus(code = HttpStatus.BAD_REQUEST)
-public class InvalidIncomeAmoutException extends RuntimeException {
+public class GoalExceededTargetException extends RuntimeException{
 
-    public InvalidIncomeAmoutException(String message) {
+    public GoalExceededTargetException(String message) {
         super(message);
     }
 }

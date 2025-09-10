@@ -20,6 +20,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.devland.finalproject.budget_tracker.applicationuser.ApplicationUserService;
+import com.devland.finalproject.budget_tracker.applicationuser.model.ApplicationUser;
 import com.devland.finalproject.budget_tracker.authentication.model.UserPrincipal;
 import com.devland.finalproject.budget_tracker.goal.model.Goal;
 import com.devland.finalproject.budget_tracker.goal.model.dto.GoalRequestDTO;
@@ -34,11 +36,12 @@ import lombok.RequiredArgsConstructor;
 @CrossOrigin(maxAge = 3600)
 public class GoalController {
     private final GoalService goalService;
+    private final ApplicationUserService applicationUserService;
 
     @GetMapping
     public ResponseEntity<Page<GoalResponseDTO>> getAll(
             Authentication authentication,
-            @RequestParam(value = "name") Optional<Goal> optionalName,
+            @RequestParam(value = "name") Optional<String> optionalName,
             @RequestParam(value = "sort", defaultValue = "ASC") String sortString,
             @RequestParam(value = "order_by", defaultValue = "id") String orderBy,
             @RequestParam(value = "limit", defaultValue = "5") int limit,
@@ -72,7 +75,9 @@ public class GoalController {
         UserPrincipal userPrincipal = (UserPrincipal) authentication.getPrincipal();
         Long userId = userPrincipal.getId();
 
-        Goal newGoal = goalRequestDTO.convertToEntity();
+        ApplicationUser applicationUser = this.applicationUserService.getOne(userId);
+
+        Goal newGoal = goalRequestDTO.convertToEntity(applicationUser);
 
         Goal savedGoal = this.goalService.create(newGoal, userId);
         GoalResponseDTO goalResponseDTO = savedGoal.convertToResponse();
@@ -91,7 +96,7 @@ public class GoalController {
 
         Goal updatedGoal = goalRequestDTO.convertToEntity();
 
-        Goal savedGoal = this.goalService.incrementProgress(id, userId, updatedGoal);
+        Goal savedGoal = this.goalService.incrementProgress(id, userId, updatedGoal.getProgress());
         GoalResponseDTO goalResponseDTO = savedGoal.convertToResponse();
 
         return ResponseEntity.ok(goalResponseDTO);
@@ -102,8 +107,10 @@ public class GoalController {
             @RequestBody GoalRequestDTO goalRequestDTO, Authentication authentication) {
         UserPrincipal userPrincipal = (UserPrincipal) authentication.getPrincipal();
         Long userId = userPrincipal.getId();
+        
+        ApplicationUser applicationUser = this.applicationUserService.getOne(userId);
 
-        Goal updatedGoal = goalRequestDTO.convertToEntity();
+        Goal updatedGoal = goalRequestDTO.convertToEntity(applicationUser);
         updatedGoal.setId(id);
         Goal savedGoal = this.goalService.update(updatedGoal, userId);
         GoalResponseDTO goalResponseDTO = savedGoal.convertToResponse();

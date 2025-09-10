@@ -4,17 +4,19 @@ import java.math.BigDecimal;
 import java.util.List;
 
 import com.devland.finalproject.budget_tracker.applicationuser.model.dto.RegisterationResponseDTO;
-import com.devland.finalproject.budget_tracker.applicationuser.model.dto.UserResponseDTO;
+import com.devland.finalproject.budget_tracker.balance.Balance;
 import com.devland.finalproject.budget_tracker.expense.model.Expense;
 import com.devland.finalproject.budget_tracker.goal.model.Goal;
 import com.devland.finalproject.budget_tracker.income.model.Income;
 import com.devland.finalproject.budget_tracker.transactionhistory.model.TransactionHistory;
 
+import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.PrePersist;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -40,8 +42,8 @@ public class ApplicationUser {
 
     private String password;
 
-    @Builder.Default
-    private BigDecimal balance = BigDecimal.ZERO;
+    @Embedded
+    private Balance balance;
 
     @OneToMany
     private List<Income> incomes;
@@ -58,20 +60,16 @@ public class ApplicationUser {
     public RegisterationResponseDTO convertToResponse() {
         return RegisterationResponseDTO.builder()
                 .id(this.id)
-                .name(this.name)
                 .email(this.email)
                 .username(this.username)
-                .password(password)
-                .balance(this.balance)
+                .balance(this.balance != null ? this.balance.getAmount() : BigDecimal.ZERO)
                 .build();
     }
 
-    public UserResponseDTO convertToUserResponse() {
-        return UserResponseDTO.builder()
-                .id(this.id)
-                .username(this.username)
-                .email(this.email)
-                .balance(this.balance)
-                .build();
+    @PrePersist
+    public void initializeBalance() {
+        if (this.balance == null) {
+            this.balance = Balance.zero();
+        }
     }
 }

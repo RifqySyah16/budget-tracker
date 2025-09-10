@@ -3,6 +3,7 @@ package com.devland.finalproject.budget_tracker.goal.model.dto;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
+import com.devland.finalproject.budget_tracker.applicationuser.model.ApplicationUser;
 import com.devland.finalproject.budget_tracker.goal.model.Goal;
 
 import jakarta.validation.constraints.NotBlank;
@@ -31,10 +32,7 @@ public class GoalRequestDTO {
     @NotNull(message = "Target is required")
     private BigDecimal target;
 
-    @NotNull(message = "Date is required")
-    private LocalDate date;
-
-    public Goal convertToEntity() {
+    public Goal convertToEntity(ApplicationUser applicationUser) {
         return Goal.builder()
                 .id(this.id)
                 .name(this.name)

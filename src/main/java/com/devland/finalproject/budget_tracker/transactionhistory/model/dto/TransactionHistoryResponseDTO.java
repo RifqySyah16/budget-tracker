@@ -1,7 +1,7 @@
 package com.devland.finalproject.budget_tracker.transactionhistory.model.dto;
 
 import java.math.BigDecimal;
-import java.time.LocalDate;
+import java.sql.Timestamp;
 
 import com.devland.finalproject.budget_tracker.applicationuser.model.dto.UserResponseDTO;
 import com.devland.finalproject.budget_tracker.expense.model.dto.ExpenseResponseDTO;
@@ -24,8 +24,8 @@ public class TransactionHistoryResponseDTO {
     private Long id;
     private TransactionType transactionType;
     private BigDecimal amount;
-    private LocalDate date;
-    private UserResponseDTO userResponseDTO;
+    private Timestamp date;
+    private RegisterationResponseDTO registerationResponseDTO;
     private IncomeResponseDTO incomeResponseDTO;
     private ExpenseResponseDTO expenseResponseDTO;
     private GoalResponseDTO goalResponseDTO;

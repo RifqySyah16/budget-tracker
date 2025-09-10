@@ -15,9 +15,7 @@ import lombok.Setter;
 @AllArgsConstructor
 public class RegisterationResponseDTO {
     private Long id;
-    private String name;
     private String email;
     private String username;
-    private String password;
     private BigDecimal balance;
 }

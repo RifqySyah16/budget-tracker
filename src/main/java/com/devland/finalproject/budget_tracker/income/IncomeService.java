@@ -13,13 +13,14 @@ import com.devland.finalproject.budget_tracker.applicationuser.model.Application
 import com.devland.finalproject.budget_tracker.income.model.Income;
 import com.devland.finalproject.budget_tracker.income.model.IncomeCategory;
 import com.devland.finalproject.budget_tracker.transactionhistory.TransactionHistoryService;
+import com.devland.finalproject.budget_tracker.transactionhistory.model.TransactionHistory;
+
 
 import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
 public class IncomeService {
-    private final BalanceService balanceService;
     private final IncomeRepository incomeRepository;
     private final ApplicationUserService applicationUserService;
     private final TransactionHistoryService transactionHistoryService;
@@ -34,22 +35,30 @@ public class IncomeService {
     }
 
     public Income add(Income newiIncome, Long userId) {
-        if (!newiIncome.getApplicationUser().getId().equals(userId)) {
-            throw new AccessDeniedException("User cannot add income for another user.");
-        }
+        this.validateIncomeAmount(newiIncome);
+        this.validateIncomeOwnership(newiIncome, userId);
 
         ApplicationUser existingUser = this.applicationUserService.getOne(userId);
         newiIncome.setApplicationUser(existingUser);
 
-        if (newiIncome.getAmount().compareTo(BigDecimal.ZERO) < 0) {
-            throw new InvalidIncomeAmoutException("Income amount cannot be negative");
-        }
+        existingUser.setBalance(existingUser.getBalance().increase(newiIncome.getAmount()));
 
         Income savedIncome = this.incomeRepository.save(newiIncome);
-        this.balanceService.increaseBalance(existingUser, savedIncome.getAmount());
 
-        this.transactionHistoryService.createIncomeHistory(savedIncome);
+        this.transactionHistoryService.add(TransactionHistory.fromIncome(savedIncome));
 
         return savedIncome;
+    }
+
+    public void validateIncomeOwnership(Income income, Long userId) {
+        if (!income.getApplicationUser().getId().equals(userId)) {
+            throw new AccessDeniedException("User cannot add income for another user.");
+        }
+    }
+
+    private void validateIncomeAmount(Income income) {
+        if (income.getAmount().compareTo(BigDecimal.ZERO) <= 0) {
+            throw new InvalidIncomeAmountException("Income amount cannot be zero or negative");
+        }
     }
 }

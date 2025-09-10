@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.devland.finalproject.budget_tracker.applicationuser.ApplicationUserService;
+import com.devland.finalproject.budget_tracker.applicationuser.model.ApplicationUser;
 import com.devland.finalproject.budget_tracker.authentication.model.UserPrincipal;
 import com.devland.finalproject.budget_tracker.expense.model.Expense;
 import com.devland.finalproject.budget_tracker.expense.model.ExpenseCategory;
@@ -62,7 +63,9 @@ public class ExpenseController {
         UserPrincipal userPrincipal = (UserPrincipal) authentication.getPrincipal();
         Long userId = userPrincipal.getId();
 
-        Expense newExpense = expenseRequestDTO.convertToEntity();
+        ApplicationUser applicationUser = this.applicationUserService.getOne(userId);
+
+        Expense newExpense = expenseRequestDTO.convertToEntity(applicationUser);
         newExpense.setApplicationUser(this.applicationUserService.getOne(userId));
 
         Expense savedExpense = this.expenseService.add(userId, newExpense);

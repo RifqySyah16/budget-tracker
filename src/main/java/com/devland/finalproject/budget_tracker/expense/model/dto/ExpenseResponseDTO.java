@@ -1,7 +1,7 @@
 package com.devland.finalproject.budget_tracker.expense.model.dto;
 
 import java.math.BigDecimal;
-import java.time.LocalDate;
+import java.sql.Timestamp;
 
 import com.devland.finalproject.budget_tracker.applicationuser.model.dto.UserResponseDTO;
 import com.devland.finalproject.budget_tracker.expense.model.ExpenseCategory;
@@ -21,6 +21,6 @@ public class ExpenseResponseDTO {
     private Long id;
     private BigDecimal amount;
     private ExpenseCategory expenseCategory;
-    private LocalDate date;
-    private UserResponseDTO userResponseDTO;
+    private Timestamp date;
+    private RegisterationResponseDTO registerationResponseDTO;
 }

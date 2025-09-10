@@ -1,7 +1,9 @@
 package com.devland.finalproject.budget_tracker.transactionhistory.model;
 
 import java.math.BigDecimal;
-import java.time.LocalDate;
+import java.sql.Timestamp;
+
+import org.hibernate.annotations.CreationTimestamp;
 
 import com.devland.finalproject.budget_tracker.applicationuser.model.ApplicationUser;
 import com.devland.finalproject.budget_tracker.applicationuser.model.dto.UserResponseDTO;
@@ -43,7 +45,8 @@ public class TransactionHistory {
 
     private BigDecimal amount;
 
-    private LocalDate date;
+    @CreationTimestamp
+    private Timestamp date;
 
     @ManyToOne
     @JoinColumn(name = "income_id")
@@ -76,6 +79,36 @@ public class TransactionHistory {
                 .expenseResponseDTO(expenseResponseDTO)
                 .goalResponseDTO(goalResponseDTO)
                 .userResponseDTO(userResponseDTO)
+                .build();
+    }
+  
+    public static TransactionHistory fromExpense(Expense savedExpense) {
+        return TransactionHistory.builder()
+                .applicationUser(savedExpense.getApplicationUser())
+                .amount(savedExpense.getAmount())
+                .date(savedExpense.getDate())
+                .transactionType(TransactionType.EXPENSE)
+                .expense(savedExpense)
+                .build();
+    }
+
+    public static TransactionHistory fromIncome(Income savedIncome) {
+        return TransactionHistory.builder()
+                .applicationUser(savedIncome.getApplicationUser())
+                .amount(savedIncome.getAmount())
+                .date(savedIncome.getDate())
+                .transactionType(TransactionType.INCOME)
+                .income(savedIncome)
+                .build();
+    }
+
+    public static TransactionHistory fromGoal(Goal savedGoal) {
+        return TransactionHistory.builder()
+                .applicationUser(savedGoal.getApplicationUser())
+                .amount(savedGoal.getProgress())
+                .date(savedGoal.getDate())
+                .transactionType(TransactionType.GOAL)
+                .goal(savedGoal)
                 .build();
     }
 }

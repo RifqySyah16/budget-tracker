@@ -1,8 +1,10 @@
 package com.devland.finalproject.budget_tracker.goal.model;
 
 import java.math.BigDecimal;
-import java.time.LocalDate;
+import java.sql.Timestamp;
 import java.util.List;
+
+import org.hibernate.annotations.CreationTimestamp;
 
 import com.devland.finalproject.budget_tracker.applicationuser.model.ApplicationUser;
 import com.devland.finalproject.budget_tracker.applicationuser.model.dto.UserResponseDTO;
@@ -41,7 +43,8 @@ public class Goal {
 
     private BigDecimal target;
 
-    private LocalDate date;
+    @CreationTimestamp
+    private Timestamp date;
 
     @OneToMany
     private List<TransactionHistory> transactionHistories;
