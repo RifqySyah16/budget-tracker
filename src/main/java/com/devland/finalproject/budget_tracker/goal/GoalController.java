@@ -94,7 +94,9 @@ public class GoalController {
         UserPrincipal userPrincipal = (UserPrincipal) authentication.getPrincipal();
         Long userId = userPrincipal.getId();
 
-        Goal updatedGoal = goalRequestDTO.convertToEntity();
+        ApplicationUser applicationUser = this.applicationUserService.getOne(userId);
+
+        Goal updatedGoal = goalRequestDTO.convertToEntity(applicationUser);
 
         Goal savedGoal = this.goalService.incrementProgress(id, userId, updatedGoal.getProgress());
         GoalResponseDTO goalResponseDTO = savedGoal.convertToResponse();

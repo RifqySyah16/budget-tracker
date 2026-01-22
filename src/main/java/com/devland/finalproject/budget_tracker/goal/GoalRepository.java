@@ -16,4 +16,6 @@ public interface GoalRepository extends JpaRepository<Goal, Long> {
 
     Optional<Goal> findByApplicationUserIdAndName(Long userId, String name);
 
+    Optional<Goal> findByIdAndApplicationUserId(Long id, Long userId);
+
 }

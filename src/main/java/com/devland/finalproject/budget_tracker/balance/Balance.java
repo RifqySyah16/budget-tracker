@@ -35,7 +35,7 @@ public class Balance {
     }
 
     private void validatePositive(BigDecimal value, String message) {
-        if (value.compareTo(BigDecimal.ZERO) < 0) {
+        if (value.compareTo(BigDecimal.ZERO) <= 0) {
             throw new NegativeBalanceIncreaseException(message);
         }
     }

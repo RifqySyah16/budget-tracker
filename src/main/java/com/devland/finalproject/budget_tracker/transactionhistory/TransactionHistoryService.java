@@ -1,6 +1,5 @@
 package com.devland.finalproject.budget_tracker.transactionhistory;
 
-import java.time.LocalDate;
 import java.util.Optional;
 
 import org.springframework.data.domain.Page;
@@ -23,22 +22,22 @@ public class TransactionHistoryService {
     private final ApplicationUserService applicationUserService;
     private final TransactionHistoryRepository transactionHistoryRepository;
 
-    public Page<TransactionHistory> getAll(Long userId, Optional<TransactionType> optionalTransactionType,
-            LocalDate startDate, LocalDate endDate, Pageable pageable) {
+    public Page<TransactionHistory> getAll(
+            Long userId,
+            Optional<TransactionType> optionalTransactionType,
+            Pageable pageable) {
+
         ApplicationUser applicationUser = this.applicationUserService.getOne(userId);
 
-        TransactionType transactionType = optionalTransactionType.isPresent() ? optionalTransactionType.get() : null;
-
-        if (transactionType != null) {
-            return this.transactionHistoryRepository.findAllByApplicationUserAndDateBetweenAndTransactionType(
-                    applicationUser,
-                    startDate, endDate,
-                    transactionType,
-                    pageable);
+        if (optionalTransactionType.isPresent()) {
+            return transactionHistoryRepository
+                    .findAllByApplicationUserAndTransactionType(
+                            applicationUser,
+                            optionalTransactionType.get(),
+                            pageable);
         }
 
-        return transactionHistoryRepository.findAllByApplicationUserAndDateBetween(applicationUser, startDate, endDate,
-                pageable);
+        return transactionHistoryRepository.findAllByApplicationUser(applicationUser, pageable);
     }
 
     public void add(TransactionHistory newTransactionHistory) {
@@ -49,7 +48,6 @@ public class TransactionHistoryService {
         TransactionHistory incomeTransactionHistory = new TransactionHistory();
         incomeTransactionHistory.setApplicationUser(savedIncome.getApplicationUser());
         incomeTransactionHistory.setAmount(savedIncome.getAmount());
-        incomeTransactionHistory.setDate(savedIncome.getDate());
         incomeTransactionHistory.setTransactionType(TransactionType.INCOME);
         incomeTransactionHistory.setIncome(savedIncome);
 
@@ -60,7 +58,6 @@ public class TransactionHistoryService {
         TransactionHistory expenseTransactionHistory = new TransactionHistory();
         expenseTransactionHistory.setApplicationUser(savedExpense.getApplicationUser());
         expenseTransactionHistory.setAmount(savedExpense.getAmount());
-        expenseTransactionHistory.setDate(savedExpense.getDate());
         expenseTransactionHistory.setTransactionType(TransactionType.EXPENSE);
         expenseTransactionHistory.setExpense(savedExpense);
 
@@ -71,7 +68,6 @@ public class TransactionHistoryService {
         TransactionHistory goalTransactionHistory = new TransactionHistory();
         goalTransactionHistory.setApplicationUser(savedGoal.getApplicationUser());
         goalTransactionHistory.setAmount(savedGoal.getProgress());
-        goalTransactionHistory.setDate(savedGoal.getDate());
         goalTransactionHistory.setTransactionType(TransactionType.GOAL);
         goalTransactionHistory.setGoal(savedGoal);
 
@@ -82,7 +78,6 @@ public class TransactionHistoryService {
         TransactionHistory increaseGoalTransactionHistory = new TransactionHistory();
         increaseGoalTransactionHistory.setApplicationUser(savedGoal.getApplicationUser());
         increaseGoalTransactionHistory.setAmount(savedGoal.getProgress());
-        increaseGoalTransactionHistory.setDate(savedGoal.getDate());
         increaseGoalTransactionHistory.setTransactionType(TransactionType.GOAL);
         increaseGoalTransactionHistory.setGoal(savedGoal);
 

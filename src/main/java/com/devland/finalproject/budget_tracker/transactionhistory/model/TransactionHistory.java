@@ -1,12 +1,9 @@
 package com.devland.finalproject.budget_tracker.transactionhistory.model;
 
 import java.math.BigDecimal;
-import java.sql.Timestamp;
-
-import org.hibernate.annotations.CreationTimestamp;
 
 import com.devland.finalproject.budget_tracker.applicationuser.model.ApplicationUser;
-import com.devland.finalproject.budget_tracker.applicationuser.model.dto.UserResponseDTO;
+import com.devland.finalproject.budget_tracker.applicationuser.model.dto.RegisterationResponseDTO;
 import com.devland.finalproject.budget_tracker.expense.model.Expense;
 import com.devland.finalproject.budget_tracker.expense.model.dto.ExpenseResponseDTO;
 import com.devland.finalproject.budget_tracker.goal.model.Goal;
@@ -45,9 +42,6 @@ public class TransactionHistory {
 
     private BigDecimal amount;
 
-    @CreationTimestamp
-    private Timestamp date;
-
     @ManyToOne
     @JoinColumn(name = "income_id")
     private Income income;
@@ -68,17 +62,16 @@ public class TransactionHistory {
         IncomeResponseDTO incomeResponseDTO = this.income != null ? this.income.convertToResponse() : null;
         ExpenseResponseDTO expenseResponseDTO = this.expense != null ? this.expense.convertToResponse() : null;
         GoalResponseDTO goalResponseDTO = this.goal != null ? this.goal.convertToResponse() : null;
-        UserResponseDTO userResponseDTO = this.applicationUser.convertToUserResponse();
+        RegisterationResponseDTO registerationResponseDTO = this.applicationUser.convertToResponse();
 
         return TransactionHistoryResponseDTO.builder()
                 .id(this.id)
                 .transactionType(this.transactionType)
                 .amount(this.amount)
-                .date(this.date)
                 .incomeResponseDTO(incomeResponseDTO)
                 .expenseResponseDTO(expenseResponseDTO)
                 .goalResponseDTO(goalResponseDTO)
-                .userResponseDTO(userResponseDTO)
+                .registerationResponseDTO(registerationResponseDTO)
                 .build();
     }
   
@@ -86,7 +79,6 @@ public class TransactionHistory {
         return TransactionHistory.builder()
                 .applicationUser(savedExpense.getApplicationUser())
                 .amount(savedExpense.getAmount())
-                .date(savedExpense.getDate())
                 .transactionType(TransactionType.EXPENSE)
                 .expense(savedExpense)
                 .build();
@@ -96,7 +88,6 @@ public class TransactionHistory {
         return TransactionHistory.builder()
                 .applicationUser(savedIncome.getApplicationUser())
                 .amount(savedIncome.getAmount())
-                .date(savedIncome.getDate())
                 .transactionType(TransactionType.INCOME)
                 .income(savedIncome)
                 .build();
@@ -106,7 +97,6 @@ public class TransactionHistory {
         return TransactionHistory.builder()
                 .applicationUser(savedGoal.getApplicationUser())
                 .amount(savedGoal.getProgress())
-                .date(savedGoal.getDate())
                 .transactionType(TransactionType.GOAL)
                 .goal(savedGoal)
                 .build();

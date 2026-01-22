@@ -1,9 +1,9 @@
 package com.devland.finalproject.budget_tracker.income.model.dto;
 
 import java.math.BigDecimal;
-import java.sql.Timestamp;
+import java.time.LocalDate;
 
-import com.devland.finalproject.budget_tracker.applicationuser.model.dto.UserResponseDTO;
+import com.devland.finalproject.budget_tracker.applicationuser.model.dto.RegisterationResponseDTO;
 import com.devland.finalproject.budget_tracker.income.model.IncomeCategory;
 
 import lombok.AllArgsConstructor;
@@ -21,6 +21,6 @@ public class IncomeResponseDTO {
     private Long id;
     private BigDecimal amount;
     private IncomeCategory incomeCategory;
-    private Timestamp date;
+    private LocalDate date;
     private RegisterationResponseDTO registerationResponseDTO;
 }

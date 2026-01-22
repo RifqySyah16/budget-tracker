@@ -1,13 +1,13 @@
 package com.devland.finalproject.budget_tracker.expense.model;
 
 import java.math.BigDecimal;
-import java.sql.Timestamp;
+import java.time.LocalDate;
 import java.util.List;
 
 import org.hibernate.annotations.CreationTimestamp;
 
 import com.devland.finalproject.budget_tracker.applicationuser.model.ApplicationUser;
-import com.devland.finalproject.budget_tracker.applicationuser.model.dto.UserResponseDTO;
+import com.devland.finalproject.budget_tracker.applicationuser.model.dto.RegisterationResponseDTO;
 import com.devland.finalproject.budget_tracker.expense.model.dto.ExpenseResponseDTO;
 import com.devland.finalproject.budget_tracker.transactionhistory.model.TransactionHistory;
 
@@ -43,7 +43,7 @@ public class Expense {
     private ExpenseCategory expenseCategory;
 
     @CreationTimestamp
-    private Timestamp date;
+    private LocalDate date;
 
     @ManyToOne
     @JoinColumn(name = "user_id")
@@ -53,14 +53,14 @@ public class Expense {
     private List<TransactionHistory> transactionHistories;
 
     public ExpenseResponseDTO convertToResponse() {
-        UserResponseDTO userResponseDTO = this.applicationUser.convertToUserResponse();
+        RegisterationResponseDTO registerationResponseDTO = this.applicationUser.convertToResponse();
 
         return ExpenseResponseDTO.builder()
                 .id(this.id)
                 .amount(this.amount)
                 .expenseCategory(this.expenseCategory)
                 .date(this.date)
-                .userResponseDTO(userResponseDTO)
+                .registerationResponseDTO(registerationResponseDTO)
                 .build();
     }
 }

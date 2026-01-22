@@ -8,7 +8,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.devland.finalproject.budget_tracker.applicationuser.ApplicationUserService;
-import com.devland.finalproject.budget_tracker.applicationuser.balance.BalanceService;
 import com.devland.finalproject.budget_tracker.applicationuser.model.ApplicationUser;
 import com.devland.finalproject.budget_tracker.goal.model.Goal;
 import com.devland.finalproject.budget_tracker.transactionhistory.TransactionHistoryService;
@@ -34,15 +33,16 @@ public class GoalService {
     }
 
     public Goal getOne(Long id, Long userId) {
-        validationUserById(userId);
+        this.validationUserById(userId);
 
-        this.validationUserById(goal, userId);
-
-        return goal;
+        return this.goalRepository.findByIdAndApplicationUserId(id, userId)
+                .orElseThrow(() -> new GoalNotFoundException("Goal not found"));
     }
 
     @Transactional
     public Goal create(Goal newGoal, Long userId) {
+        this.validationUserById(userId);
+        
         ApplicationUser existingUser = this.applicationUserService.getOne(userId);
         newGoal.setApplicationUser(existingUser);
 
@@ -96,9 +96,9 @@ public class GoalService {
         this.goalRepository.deleteById(id);
     }
 
-    private void validationUserById(Goal goal, Long userId) {
-        if (!goal.getApplicationUser().getId().equals(userId)) {
-            throw new AccessGoalDeniedException("User cannot add goal for another user");
+    private void validationUserById(Long userId) {
+        if (userId == null) {
+            throw new AccessGoalDeniedException("Cannot add goal for another user");
         }
     }
 }

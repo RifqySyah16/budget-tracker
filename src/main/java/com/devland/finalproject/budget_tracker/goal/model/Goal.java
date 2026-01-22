@@ -1,13 +1,13 @@
 package com.devland.finalproject.budget_tracker.goal.model;
 
 import java.math.BigDecimal;
-import java.sql.Timestamp;
+import java.time.LocalDate;
 import java.util.List;
 
 import org.hibernate.annotations.CreationTimestamp;
 
 import com.devland.finalproject.budget_tracker.applicationuser.model.ApplicationUser;
-import com.devland.finalproject.budget_tracker.applicationuser.model.dto.UserResponseDTO;
+import com.devland.finalproject.budget_tracker.applicationuser.model.dto.RegisterationResponseDTO;
 import com.devland.finalproject.budget_tracker.goal.model.dto.GoalResponseDTO;
 import com.devland.finalproject.budget_tracker.transactionhistory.model.TransactionHistory;
 
@@ -44,7 +44,7 @@ public class Goal {
     private BigDecimal target;
 
     @CreationTimestamp
-    private Timestamp date;
+    private LocalDate date;
 
     @OneToMany
     private List<TransactionHistory> transactionHistories;
@@ -54,7 +54,7 @@ public class Goal {
     private ApplicationUser applicationUser;
 
     public GoalResponseDTO convertToResponse() {
-        UserResponseDTO userResponseDTO = this.applicationUser.convertToUserResponse();
+        RegisterationResponseDTO registerationResponseDTO = this.applicationUser.convertToResponse();
 
         return GoalResponseDTO.builder()
                 .id(this.id)
@@ -63,7 +63,7 @@ public class Goal {
                 .progress(this.progress)
                 .target(this.target)
                 .date(this.date)
-                .userResponseDTO(userResponseDTO)
+                .registerationResponseDTO(registerationResponseDTO)
                 .build();
     }
 }

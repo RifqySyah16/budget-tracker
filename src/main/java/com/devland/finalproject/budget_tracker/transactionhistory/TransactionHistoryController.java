@@ -1,6 +1,5 @@
 package com.devland.finalproject.budget_tracker.transactionhistory;
 
-import java.time.LocalDate;
 import java.util.Optional;
 
 import org.springframework.data.domain.Page;
@@ -33,8 +32,6 @@ public class TransactionHistoryController {
         public ResponseEntity<Page<TransactionHistoryResponseDTO>> getAll(
                         Authentication authentication,
                         @RequestParam(value = "transaction_type", required = false) Optional<TransactionType> optionalTransactionType,
-                        @RequestParam(value = "start_date", required = true) LocalDate startDate,
-                        @RequestParam(value = "end_date", required = true) LocalDate endDate,
                         @RequestParam(value = "sort", defaultValue = "ASC") String sortString,
                         @RequestParam(value = "order_by", defaultValue = "id") String orderBy,
                         @RequestParam(value = "limit", defaultValue = "5") int limit,
@@ -47,7 +44,7 @@ public class TransactionHistoryController {
                 Pageable pageable = PageRequest.of(page - 1, limit, sort);
 
                 Page<TransactionHistory> pageTransactionHistory = this.transactionHistoryService.getAll(userId,
-                                optionalTransactionType, startDate, endDate, pageable);
+                                optionalTransactionType, pageable);
                 Page<TransactionHistoryResponseDTO> transactionHistoryResponseDTOs = pageTransactionHistory
                                 .map(TransactionHistory::convertToResponse);
 
